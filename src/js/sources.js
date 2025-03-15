@@ -8,7 +8,12 @@ export default [
       'textures/environmentMap/py.jpg',
       'textures/environmentMap/ny.jpg',
       'textures/environmentMap/pz.jpg',
-      'textures/environmentMap/nz.jpg'
-    ]
-  }
-];
+      'textures/environmentMap/nz.jpg',
+    ],
+  },
+  {
+    name: 'sceneModel',
+    type: 'gltfModel',
+    path: 'models/scene.glb',
+  },
+]

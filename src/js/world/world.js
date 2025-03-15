@@ -1,28 +1,22 @@
-import * as THREE from 'three';
+import * as THREE from 'three'
 
-import Experience from '../experience.js';
-import Environment from './environment.js';
-import NormalizedBall from './normalized-ball.js';
+import Experience from '../experience.js'
+import Environment from './environment.js'
 
 export default class World {
   constructor() {
-    this.experience = new Experience();
-    this.scene = this.experience.scene;
-    this.resources = this.experience.resources;
+    this.experience = new Experience()
+    this.scene = this.experience.scene
+    this.resources = this.experience.resources
 
-    this.scene.add(new THREE.AxesHelper(5));
+    this.scene.add(new THREE.AxesHelper(5))
     // Environment
     this.resources.on('ready', () => {
       // Setup
-      this.environment = new Environment();
-    });
-    // 归一化小球
-    this.normalizedBall = new NormalizedBall();
+      this.environment = new Environment()
+    })
   }
 
   update() {
-    if (this.normalizedBall) {
-      this.normalizedBall.update();
-    }
   }
 }

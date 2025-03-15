@@ -1,16 +1,16 @@
 {
+  "type": "module",
   "private": true,
   "author": {
     "name": "Doinel Atanasiu",
     "email": "doinel1atanasiu@gmail.com",
     "url": "https://business-link.d1a.app"
   },
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/doinel1a/vite-three-js"
   },
-  "type": "module",
-  "license": "MIT",
   "scripts": {
     "postinstall": "husky & playwright install",
     "clean:dist": "npx rimraf dist",
@@ -18,8 +18,8 @@
     "test:chrome": "npx playwright test --headed --project=chromium",
     "test:firefox": "npx playwright test --headed --project=firefox",
     "test:safari": "npx playwright test --headed --project=webkit",
-    "lint": "npx eslint --ext js ./src",
-    "lint:fix": "npx eslint --ext js ./src --fix",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
     "dev": "vite --host",
     "build": "vite build",
     "preview": "vite preview"
@@ -32,13 +32,14 @@
     "three": "^0.172.0"
   },
   "devDependencies": {
+    "@antfu/eslint-config": "^4.10.1",
     "@builder.io/partytown": "^0.10.2",
     "@commitlint/cli": "^19.4.0",
     "@commitlint/config-conventional": "^19.2.2",
     "@playwright/test": "^1.46.0",
     "autoprefixer": "^10.4.20",
     "cssnano": "^7.0.5",
-    "eslint": "^8.57.0",
+    "eslint": "^9.22.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-prettier": "^5.2.1",
