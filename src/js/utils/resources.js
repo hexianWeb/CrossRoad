@@ -24,6 +24,11 @@ export default class Resources extends EventEmitter {
     this.toLoad = this.sources.length
     this.loaded = 0
 
+    // Loading screen elements
+    this.loadingScreen = document.getElementById('loading-screen')
+    this.loadingBar = document.getElementById('loading-bar')
+    this.loadingPercentage = document.getElementById('loading-percentage')
+
     this.options = {
       dracoDecoderPath: 'https://www.gstatic.com/draco/v1/decoders/',
       ktx2TranscoderPath: 'https://unpkg.com/three/examples/jsm/libs/basis/',
@@ -142,10 +147,28 @@ export default class Resources extends EventEmitter {
 
   sourceLoaded(source, file) {
     this.items[source.name] = file
-
     this.loaded++
 
+    // Update loading progress
+    const progress = this.loadProgress
+    const percentage = Math.round(progress * 100)
+
+    if (this.loadingBar) {
+      this.loadingBar.style.width = `${percentage}%`
+    }
+    if (this.loadingPercentage) {
+      this.loadingPercentage.textContent = `${percentage}%`
+    }
+
     if (this.loaded === this.toLoad) {
+      // Hide loading screen with fade out animation
+      if (this.loadingScreen) {
+        this.loadingScreen.style.transition = 'opacity 0.5s ease-out'
+        this.loadingScreen.style.opacity = '0'
+        setTimeout(() => {
+          this.loadingScreen.style.display = 'none'
+        }, 500)
+      }
       this.trigger('ready')
     }
   }
