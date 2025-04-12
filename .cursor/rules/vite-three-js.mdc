@@ -1,0 +1,142 @@
+---
+description: 按原框架风格
+globs: 
+alwaysApply: false
+---
+# vite-three-js 框架风格指南
+
+我在写一个 threejs 的快速启动框架, 其中 `threejs` 使用的语言为 `JS`，框架中的绝大部分代码都存在于类组件中，然后通过实例化类组件后获取实例再对其内在内:**
+
+框架的核心是 `src/js/experience.js` 文件中定义的 `Experience` 类。这个类采用**单例模式**，确保全局只有一个 `Experience` 实例。它负责初始化和管理 Three.js 的核心组件以及各种工具类实例。
+
+**获取核心实例:**
+
+在框架的其他类组件中，你需要先获取 `Experience` 的单例实例，然后通过该实例访问所需的属性和工具。标准做法如下：
+
+```js
+// 确保从正确的路径导入 Experience
+import Experience from './experience.js' 
+
+export default class Your3DComponent {
+  constructor() {
+    // 获取 Experience 单例实例
+    this.experience = new Experience()
+
+    // 通过 experience 实例访问核心组件和工具 
+    this.scene = this.experience.scene             // THREE.Scene 实例
+    this.resources = this.experience.resources     // 资源加载器实例 (Resources)
+    this.camera = this.experience.camera.instance  // THREE.Camera 实例 (透视或正交)
+    this.renderer = this.experience.renderer.instance // THREE.WebGLRenderer 实例
+    this.time = this.experience.time               // 时间控制器实例 (Time)
+    this.sizes = this.experience.sizes             // 尺寸管理器实例 (Sizes)
+    this.iMouse = this.experience.iMouse           // 鼠标跟踪器实例 (IMouse)
+    this.debug = this.experience.debug             // 调试 UI 实例 (Debug)
+    this.physics = this.experience.physics         // 物理世界实例 (PhysicsWorld)
+    this.stats = this.experience.stats             //性能监控实例 (Stats)
+    this.canvas = this.experience.canvas           // HTML Canvas 元素
+    // ... 其他可能需要的实例
+  }
+
+  // ... 组件的其他方法 (例如 update, resize 等)
+}
+```
+**注意 自动生成代码获取共用属性以及方法时仅取得需要的属性即可**：
+如某个3D组件用于引入加载的模型，则他只需要引入 scene & resource
+```js
+export default class Your3DComponent {
+  // 获取共用属性以及方法
+  constructor() {
+    // 获取 Experience 单例实例
+    this.experience = new Experience()
+
+    // 通过 experience 实例访问核心组件和工具 
+    this.scene = this.experience.scene             // THREE.Scene 实例
+    this.resources = this.experience.resources     // 资源加载器实例 (Resources)
+    this.debug = this.experience.debug             // 调试 UI 实例 (Debug)
+
+    // 组件自身属性
+    this.selfProp1;
+    this.selfProp2;
+
+
+    if (this.debug.active) {
+      this.debugInit()
+    }
+  }
+
+  // 3D 组件内置方法
+  this.func1();
+  // TODO： 要在3D 组件实现的功能
+
+  func1() {
+
+  }
+
+  func2() {
+
+  }
+
+  // 控制面板
+  debugInit() {
+    // ===== 总控制面板 =====
+    this.debugFolder = this.debug.ui.addFolder({
+      title: '控制面板名称',
+      expanded: true,
+    })
+    
+    // ----- 次级控制面板 -----
+    const XXXolder = this.debugFolder.addFolder({
+      title: '基本信息',
+      expanded: true,
+    })
+    XXXolder.addBinding(
+       this.object,
+       params,
+       {
+        label: '标题',
+       }
+    ).on('change',(event)=>{
+      // todo
+    })
+  }
+
+ //如果组件内部有更新行为 需要构建 update func
+ update() { 
+  // 做更新行为  
+ }
+
+ //如果组件内部有resize行为 需要构建 resize func
+ resize() {
+
+ }
+
+}
+
+```
+**创造时需注意关键点**
+*   **单例模式:** 任何地方调用 `new Experience()` 都会返回同一个已经创建好的实例。这是获取框架核心访问权限的标准方式。
+*   **实例访问:** 始终通过 `this.experience` 这个实例来访问共享的资源，例如 `this.experience.scene`, `this.experience.time`。
+*   **父子组件通信:** 如果父组件和子组件之间需要进行通信（例如，子组件需要通知父组件某个事件发生），应考虑让相关组件继承 `src/js/utils/event-emitter.js` 中的 `EventEmitter` 类。子组件可以通过 `this.trigger('eventName', [arguments])` 触发事件，父组件可以通过 `childInstance.on('eventName', callback)` 来监听事件。
+*  **debugInit** 每个创建的类组件都应该拥有足够多的可控制面板。特别是创建的 3D 基本体使用了 `ShaderMaterial` 时,注意 一般调控属性使用 `addBinding` 而不是 `addInput`
+*  **update** 当类组件中 `update` 内部存在逻辑时，要求在调用他的父组件(如果有)里调用 `update` 如在`FatherComponent`中执行 `this.child.update()`
+*  **
+*   **相机 (`Camera`)**:
+    *   定义在 `src/js/camera.js`。
+    *   `Experience` 持有 `Camera` 类的实例 (`this.experience.camera`)。
+    *   实际使用的 `THREE.Camera` 对象通过 `this.experience.camera.instance` 获取。
+    *   `new Experience(canvas)` 时，内部会调用 `new Camera(true)` 创建一个 **正交相机**。如果需要透视相机，需要修改 `experience.js` 中 `Camera` 的实例化。
+*   **渲染器 (`Renderer`)**:
+    *   定义在 `src/js/renderer.js`。
+    *   `Experience` 持有 `Renderer` 类的实例 (`this.experience.renderer`)。
+    *   实际使用的 `THREE.WebGLRenderer` 对象通过 `this.experience.renderer.instance` 获取。
+*   **资源 (`Resources`)**:
+    *   定义在 `src/js/utils/resources.js`。
+    *   用于加载纹理、模型等资源，资源列表定义在 `src/js/sources.js`。
+    *   通过 `this.experience.resources` 访问。加载完成的资源存储在 `this.experience.resources.items` 中。
+*   **加载部分资源:** 默认情况下，`Experience` 会加载 `sources.js` 中的所有资源。如果你只需要加载特定资源并在某子组件内使用只需要在 [sources.js](mdc:src/js/sources.js) 文件中统一定义所有需要加载的资源（模型、纹理等）。`Experience` 类会自动初始化 `Resources` 并加载 `src/js/sources.js` 中定义的 *所有* 资源。`Resources` 类会根据资源的 `type` 自动选择合适的加载器。资源加载完成后，在任何组件中，都可以通过 `Experience` 单例的 `this.experience.resources.items['资源名称']` 来访问已加载的资源。
+*   **鼠标/触摸与射线拾取:** 当你需要进行射线拾取 (Raycasting) 或其他需要归一化设备坐标 (NDC) 的操作时，**务必**使用 `IMouse` 实例提供的 `normalizedMouse` 属性 (`this.experience.iMouse.normalizedMouse`)。这个属性已经是计算好的、范围在 [-1, 1] 的 NDC 坐标。**避免**在组件中重新通过 `event.clientX / window.innerWidth * 2 - 1` 等方式手动计算 NDC，以保持代码简洁和一致性。
+*   **代码风格:** 编写新的 3D 组件或逻辑时，请遵循这种通过 `Experience` 单例获取依赖的方式，以保持代码风格的统一和易于维护。尽量将相关的 3D 逻辑封装在独立的类中。
+
+
+
+
