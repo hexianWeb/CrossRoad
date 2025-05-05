@@ -10,6 +10,14 @@ export default class World {
     this.resources = this.experience.resources
 
     this.scene.add(new THREE.AxesHelper(5))
+
+    const box = new THREE.Mesh(
+      new THREE.BoxGeometry(0.2, 0.2, 0.2),
+      new THREE.MeshBasicMaterial({
+        color: 'red',
+      }),
+    )
+    this.scene.add(box)
     // Environment
     this.resources.on('ready', () => {
       // Setup

@@ -29,9 +29,5 @@ export default [
       'textures/environmentMap/nz.jpg',
     ],
   },
-  {
-    name: 'sceneModel',
-    type: 'gltfModel',
-    path: 'models/scene.glb',
-  },
+
 ]

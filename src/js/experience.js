@@ -34,7 +34,7 @@ export default class Experience {
     this.sizes = new Sizes()
     this.time = new Time()
     this.scene = new THREE.Scene()
-    this.camera = new Camera(true) // 正交相机
+    this.camera = new Camera()
     this.renderer = new Renderer()
     this.resources = new Resources(sources)
     this.physics = new PhysicsWorld()
@@ -58,7 +58,7 @@ export default class Experience {
   update() {
     this.camera.update()
     this.world.update()
-    // this.renderer.update(); // 切换为手动更新
+    this.renderer.update() // 切换为手动更新
     this.stats.update()
     this.iMouse.update()
   }
