@@ -1,0 +1,59 @@
+---
+description: 
+globs: *.glsl
+alwaysApply: false
+---
+## Shader Development Guidelines
+
+### Code Organization
+- Use clear naming conventions for uniforms and varyings
+- Organize shader code into logical sections (uniforms, varyings, functions, main)
+- Use includes for shared functionality
+- Document complex mathematical operations
+- Keep shader files focused and single-purpose
+
+### Performance Optimization
+- Minimize conditional statements in fragment shaders
+- Use built-in GLSL functions when available
+- Optimize vector operations
+- Minimize texture lookups
+- Use appropriate precision qualifiers
+- Avoid dynamic loops where possible
+- Cache repeated calculations
+
+### Best Practices
+- Initialize all variables
+- Use appropriate data types
+- Handle edge cases gracefully
+- Implement proper error handling
+- Use preprocessor directives effectively
+- Follow GLSL version compatibility guidelines
+- Document performance implications
+
+### Texture Management
+- Use appropriate texture formats
+- Implement proper texture coordinate handling
+- Use texture arrays when appropriate
+- Handle texture boundaries properly
+- Implement proper mipmap usage
+
+### Mathematics
+- Use efficient mathematical operations
+- Implement proper interpolation methods
+- Use appropriate coordinate spaces
+- Handle numerical precision issues
+- Document complex mathematical concepts
+
+### Debugging
+- Use debug output uniforms
+- Implement visual debugging modes
+- Use appropriate error checking
+- Document known limitations
+- Implement fallbacks for unsupported features
+
+### Cross-Platform Compatibility
+- Test on multiple GPU vendors
+- Handle precision differences
+- Use appropriate extensions
+- Document platform-specific issues
+- Implement fallbacks for unsupported features

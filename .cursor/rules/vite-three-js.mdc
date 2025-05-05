@@ -1,11 +1,11 @@
 ---
-description: 按原框架风格
+description: 
 globs: 
-alwaysApply: false
+alwaysApply: true
 ---
 # vite-three-js 框架风格指南
 
-我在写一个 threejs 的快速启动框架, 其中 `threejs` 使用的语言为 `JS`，框架中的绝大部分代码都存在于类组件中，然后通过实例化类组件后获取实例再对其内在内:**
+我在利用 threejs 的快速启动框架 来实现 `PRD.md` 中的内容, 其中 `threejs` 使用的语言为 `JS`，框架中的绝大部分代码都存在于类组件中，然后通过实例化类组件后获取实例再对其内在内:**
 
 框架的核心是 `src/js/experience.js` 文件中定义的 `Experience` 类。这个类采用**单例模式**，确保全局只有一个 `Experience` 实例。它负责初始化和管理 Three.js 的核心组件以及各种工具类实例。
 
@@ -40,8 +40,10 @@ export default class Your3DComponent {
   // ... 组件的其他方法 (例如 update, resize 等)
 }
 ```
+
 **注意 自动生成代码获取共用属性以及方法时仅取得需要的属性即可**：
 如某个3D组件用于引入加载的模型，则他只需要引入 scene & resource
+
 ```js
 export default class Your3DComponent {
   // 获取共用属性以及方法
@@ -113,13 +115,24 @@ export default class Your3DComponent {
 }
 
 ```
+
 **创造时需注意关键点**
+
 *   **单例模式:** 任何地方调用 `new Experience()` 都会返回同一个已经创建好的实例。这是获取框架核心访问权限的标准方式。
 *   **实例访问:** 始终通过 `this.experience` 这个实例来访问共享的资源，例如 `this.experience.scene`, `this.experience.time`。
-*   **父子组件通信:** 如果父组件和子组件之间需要进行通信（例如，子组件需要通知父组件某个事件发生），应考虑让相关组件继承 `src/js/utils/event-emitter.js` 中的 `EventEmitter` 类。子组件可以通过 `this.trigger('eventName', [arguments])` 触发事件，父组件可以通过 `childInstance.on('eventName', callback)` 来监听事件。
-*  **debugInit** 每个创建的类组件都应该拥有足够多的可控制面板。特别是创建的 3D 基本体使用了 `ShaderMaterial` 时,注意 一般调控属性使用 `addBinding` 而不是 `addInput`
-*  **update** 当类组件中 `update` 内部存在逻辑时，要求在调用他的父组件(如果有)里调用 `update` 如在`FatherComponent`中执行 `this.child.update()`
+*   **父子组件通信:** 如果父组件和子组件之间需要进行通信（例如，子组件需要通知父组件某个事件发生），应考虑让相关组件继承 [event-emitter.js](mdc:src/js/utils/event-emitter.js) 中的 `EventEmitter` 类。子组件可以通过 `this.trigger('eventName', [arguments])` 触发事件，父组件可以通过 `childInstance.on('eventName', callback)` 来监听事件。
+*   **debugInit** 每个创建的类组件都应该拥有足够多的可控制面板。特别是创建的 3D 基本体使用了 `ShaderMaterial` 时,注意 一般调控属性使用 `addBinding` 而不是 `addInput` ,**所有的颜色调控都使用**:
+
+```js
+XXXFolder.addBinding(PARAMS, 'background', {
+  view: 'color',
+});
+```
+
+*  **update** 当类组件中 `update` 内部存在逻辑时，要求在调用他的父组件(如果有)里调用 `update` 如在`FatherComponent`中执行 `this.child.update()` **注意： 时间并不通过update参数传递 而是 通过this.experience.time来获取时间对象**
+
 *  **
+
 *   **相机 (`Camera`)**:
     *   定义在 `src/js/camera.js`。
     *   `Experience` 持有 `Camera` 类的实例 (`this.experience.camera`)。
@@ -135,7 +148,8 @@ export default class Your3DComponent {
     *   通过 `this.experience.resources` 访问。加载完成的资源存储在 `this.experience.resources.items` 中。
 *   **加载部分资源:** 默认情况下，`Experience` 会加载 `sources.js` 中的所有资源。如果你只需要加载特定资源并在某子组件内使用只需要在 [sources.js](mdc:src/js/sources.js) 文件中统一定义所有需要加载的资源（模型、纹理等）。`Experience` 类会自动初始化 `Resources` 并加载 `src/js/sources.js` 中定义的 *所有* 资源。`Resources` 类会根据资源的 `type` 自动选择合适的加载器。资源加载完成后，在任何组件中，都可以通过 `Experience` 单例的 `this.experience.resources.items['资源名称']` 来访问已加载的资源。
 *   **鼠标/触摸与射线拾取:** 当你需要进行射线拾取 (Raycasting) 或其他需要归一化设备坐标 (NDC) 的操作时，**务必**使用 `IMouse` 实例提供的 `normalizedMouse` 属性 (`this.experience.iMouse.normalizedMouse`)。这个属性已经是计算好的、范围在 [-1, 1] 的 NDC 坐标。**避免**在组件中重新通过 `event.clientX / window.innerWidth * 2 - 1` 等方式手动计算 NDC，以保持代码简洁和一致性。
-*   **代码风格:** 编写新的 3D 组件或逻辑时，请遵循这种通过 `Experience` 单例获取依赖的方式，以保持代码风格的统一和易于维护。尽量将相关的 3D 逻辑封装在独立的类中。
+*   **代码风格:** 编写新的 3D 组件或逻辑时，请遵循这种通过 `Experience` 单例获取依赖的方式，以保持代码风格的统一和易于维护。尽量将相关的 3D 逻辑封装在独立的类中。且代码中的注释需要为中文注释
+*   **着色器风格:** 因为框架集成了 `vite-glsl-plugin` 在编写 `ShaderMaterial` 或者带有着色器部分的代码片段时，需要将着色器放入 `src`的`shaders`文件夹下.
 
 
 

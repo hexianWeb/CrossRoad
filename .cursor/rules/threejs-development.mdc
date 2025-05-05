@@ -1,0 +1,57 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+## Three.js Development Guidelines
+
+### Scene Management
+- Keep scene graph hierarchy clean and optimized
+- Use object pooling for frequently created/destroyed objects
+- Implement proper cleanup methods for disposed objects
+- Group related meshes using Object3D for better organization
+- Use meaningful names for all scene objects
+
+### Performance Optimization
+- Minimize draw calls by using geometry instancing where appropriate
+- Implement proper level of detail (LOD) for complex models
+- Use texture atlases when possible to reduce texture switches
+- Implement frustum culling for off-screen objects
+- Cache frequently accessed values and objects
+- Use BufferGeometry instead of Geometry
+- Optimize shader complexity based on target devices
+
+### Resource Management
+- Implement proper asset loading and management
+- Use TextureLoader for efficient texture loading
+- Implement proper error handling for failed loads
+- Use DRACO compression for complex geometries
+- Properly dispose of materials, geometries, and textures
+
+### Animation
+- Use the Animation System efficiently
+- Implement proper animation mixing and transitions
+- Use skeletal animation when appropriate
+- Optimize animation data for performance
+- Implement proper animation cleanup
+
+### Camera Controls
+- Implement smooth camera transitions
+- Set appropriate near/far planes
+- Use proper camera projection for the scene
+- Implement proper camera collision detection if needed
+- Handle camera aspect ratio changes properly
+
+### Rendering
+- Use appropriate renderer settings for the target platform
+- Implement proper post-processing pipeline
+- Use appropriate shadow mapping techniques
+- Implement proper anti-aliasing strategy
+- Handle window resize events properly
+
+### Debug & Development
+- Use Stats.js for performance monitoring
+- Implement proper debug views
+- Use proper logging for WebGL warnings
+- Implement proper error boundaries
+- Use appropriate development tools (OrbitControls, etc.)

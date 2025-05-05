@@ -1,0 +1,61 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+## Project Structure Guidelines
+
+### Directory Organization
+- Keep related files together in appropriate directories
+- Use consistent naming conventions across the project
+- Maintain clear separation of concerns between components
+- Follow the established directory structure
+- Document any deviations from standard structure
+
+### Asset Management
+- Store assets in appropriate directories under /public
+- Use proper file formats for different asset types
+- Maintain proper versioning for assets
+- Document asset requirements and formats
+- Implement proper asset optimization pipeline
+
+### Component Organization
+- Keep components focused and single-purpose
+- Implement proper component hierarchy
+- Use consistent component structure
+- Document component dependencies
+- Maintain proper component documentation
+
+### Code Style
+- Follow established coding style guidelines
+- Use consistent naming conventions
+- Implement proper code documentation
+- Maintain proper error handling
+
+### Build Process
+- Follow Vite.js best practices
+- Optimize build configuration
+- Implement proper environment handling
+- Document build requirements
+- Maintain proper dependency management
+
+### Testing
+- Implement comprehensive test coverage
+- Use appropriate testing frameworks
+- Maintain proper test organization
+- Document testing requirements
+- Follow test-driven development practices
+
+### Documentation
+- Maintain up-to-date documentation
+- Use consistent documentation format
+- Document all major features
+- Keep README.md current
+- Document all configuration options
+
+### Version Control
+- Follow proper Git workflow
+- Use meaningful commit messages
+- Maintain clean Git history
+- Document branching strategy
+- Follow proper PR process
