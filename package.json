@@ -28,8 +28,10 @@
     "@vitejs/plugin-legacy": "^5.4.1",
     "cannon": "^0.6.2",
     "gsap": "^3.12.5",
+    "pinia": "^3.0.2",
     "postcss-import": "^16.1.0",
-    "three": "^0.172.0"
+    "three": "^0.172.0",
+    "vue": "^3.5.13"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^4.10.1",
@@ -37,6 +39,7 @@
     "@commitlint/cli": "^19.4.0",
     "@commitlint/config-conventional": "^19.2.2",
     "@playwright/test": "^1.46.0",
+    "@vitejs/plugin-vue": "^5.2.3",
     "autoprefixer": "^10.4.20",
     "cssnano": "^7.0.5",
     "eslint": "^9.22.0",

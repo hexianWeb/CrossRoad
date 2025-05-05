@@ -82,6 +82,7 @@
     <script defer src="/_vercel/insights/script.js"></script>
   </head>
   <body>
+    <div id="app"></div>
     <!-- Loading 全屏 进度 -->
     <div id="loading-screen" class="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-gray-900">
       <div class="w-64 space-y-4">
@@ -97,25 +98,6 @@
     <noscript class="text-center text-lg text-red-500">
       Enable JavaScript to enjoy all the features of this app.
     </noscript>
-    <main class="flex h-full bg-primary text-color">
-      <header
-        class="absolute top-0 z-[1] w-full cursor-default bg-accent-primary sm:w-auto"
-      >
-        <div class="relative flex justify-center">
-          <h1
-            class="z-[1] select-none p-4 text-xl font-semibold sm:text-2xl md:text-3xl"
-          >
-            Vite ThreeJS — Template
-          </h1>
-          <div
-            class="arrow-right top absolute -right-[43px] -top-[35px] hidden h-0 w-0 rotate-90 border-b-[60px] border-t-[70px] border-b-transparent border-l-accent-primary border-t-transparent sm:-right-[40px] sm:block sm:border-l-[70px] md:-right-[43px] md:border-l-[76px]"
-          ></div>
-        </div>
-      </header>
-      <canvas id="canvas" class="z-[0] h-full w-full"></canvas>
-
-    </main>
-
-    <script type="module" src="src/js/index.js"></script>
+    <script type="module" src="/src/main.js"></script>
   </body>
 </html>

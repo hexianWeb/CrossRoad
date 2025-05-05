@@ -2,6 +2,7 @@ import path from 'node:path'
 
 import { partytownVite } from '@builder.io/partytown/utils'
 import legacy from '@vitejs/plugin-legacy'
+import vue from '@vitejs/plugin-vue'
 import glsl from 'vite-plugin-glsl'
 
 import _config from './_config'
@@ -17,6 +18,7 @@ export default {
   plugins: [
     legacy(),
     glsl(),
+    vue(),
     partytownVite({
       dest: path.join(__dirname, 'dist', '~partytown'),
     }),
