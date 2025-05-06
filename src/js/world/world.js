@@ -2,6 +2,7 @@ import * as THREE from 'three'
 
 import Experience from '../experience.js'
 import Environment from './environment.js'
+import Map from './Map.js'
 
 export default class World {
   constructor() {
@@ -11,16 +12,10 @@ export default class World {
 
     this.scene.add(new THREE.AxesHelper(5))
 
-    const box = new THREE.Mesh(
-      new THREE.BoxGeometry(0.2, 0.2, 0.2),
-      new THREE.MeshBasicMaterial({
-        color: 'red',
-      }),
-    )
-    this.scene.add(box)
     // Environment
     this.resources.on('ready', () => {
       // Setup
+      this.map = new Map()
       this.environment = new Environment()
     })
   }
