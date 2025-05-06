@@ -29,5 +29,44 @@ export default [
       'textures/environmentMap/nz.jpg',
     ],
   },
-
+  {
+    name: 'chicken',
+    type: 'gltfModel',
+    path: './model/chicken.glb',
+  },
+  {
+    name: 'grass',
+    type: 'gltfModel',
+    path: './model/grass02.glb',
+  },
+  {
+    name: 'road',
+    type: 'gltfModel',
+    path: './model/road.glb',
+  },
+  {
+    name: 'tree01',
+    type: 'gltfModel',
+    path: './model/tree01.glb',
+  },
+  {
+    name: 'tree02',
+    type: 'gltfModel',
+    path: './model/tree02.glb',
+  },
+  {
+    name: 'tree03',
+    type: 'gltfModel',
+    path: './model/tree03.glb',
+  },
+  {
+    name: 'tree04',
+    type: 'gltfModel',
+    path: './model/tree04.glb',
+  },
+  {
+    name: 'tile',
+    type: 'gltfModel',
+    path: './model/tile.glb',
+  },
 ]

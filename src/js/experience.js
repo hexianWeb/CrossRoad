@@ -34,7 +34,7 @@ export default class Experience {
     this.sizes = new Sizes()
     this.time = new Time()
     this.scene = new THREE.Scene()
-    this.camera = new Camera()
+    this.camera = new Camera(true)
     this.renderer = new Renderer()
     this.resources = new Resources(sources)
     this.physics = new PhysicsWorld()

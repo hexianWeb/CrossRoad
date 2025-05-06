@@ -32,7 +32,7 @@ export default class Camera {
         this.frustumSize * aspect,
         this.frustumSize,
         -this.frustumSize,
-        -1,
+        -50,
         100,
       )
     }
