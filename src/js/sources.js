@@ -35,14 +35,9 @@ export default [
     path: './model/chicken.glb',
   },
   {
-    name: 'grassLong',
-    type: 'gltfModel',
-    path: './model/grass.glb',
-  },
-  {
     name: 'grass',
     type: 'gltfModel',
-    path: './model/grass02.glb',
+    path: './model/grass.glb',
   },
   {
     name: 'road',
@@ -73,5 +68,25 @@ export default [
     name: 'tile',
     type: 'gltfModel',
     path: './model/grass02.glb',
+  },
+  {
+    name: 'car01',
+    type: 'gltfModel',
+    path: './model/car01.glb',
+  },
+  {
+    name: 'car02',
+    type: 'gltfModel',
+    path: './model/car02.glb',
+  },
+  {
+    name: 'car03',
+    type: 'gltfModel',
+    path: './model/car03.glb',
+  },
+  {
+    name: 'car04',
+    type: 'gltfModel',
+    path: './model/car04.glb',
   },
 ]

@@ -1,5 +1,6 @@
 // 引入 Experience 单例和常量
 import Experience from '../experience.js'
+import Car from './Car.js'
 import Grass from './Grass.js'
 import metaData from './metaData.js'
 import Road from './Road.js'
@@ -24,6 +25,8 @@ export default class Map {
     this.treeRows = []
     // 存储道路对象
     this.roadRows = []
+    // 存储车辆对象
+    this.carRows = []
 
     // 初始化地图
     this.initializeMap()
@@ -54,6 +57,7 @@ export default class Map {
       if (rowData && rowData.type === 'road') {
         this.addRoadRow(this.rowIndex)
         this.addRoadRow(++this.rowIndex)
+        this.addCarRow(rowData.vehicles, this.rowIndex, rowData.direction, rowData.speed)
       }
     })
   }
@@ -77,6 +81,12 @@ export default class Map {
     this.roadRows.push(road)
   }
 
+  // 添加一行车辆
+  addCarRow(vehicles, rowIndex = 0, direction = false, speed = 1) {
+    const carRow = new Car(this.scene, this.resources, vehicles, rowIndex, direction, speed)
+    this.carRows.push(carRow)
+  }
+
   // 扩展地图（可根据需要实现）
   extendMap(_newMetadata) {
     // TODO: 扩展地图逻辑
@@ -98,8 +108,17 @@ export default class Map {
     // 移除所有道路对象
     this.roadRows.forEach(road => road.remove())
     this.roadRows = []
+    // 移除所有车辆对象
+    this.carRows.forEach(carRow => carRow.remove())
+    this.carRows = []
     // 重新初始化
     this.initializeMap()
+  }
+
+  update() {
+    this.carRows.forEach((carRow) => {
+      carRow.update()
+    })
   }
 
   // Debug 面板
