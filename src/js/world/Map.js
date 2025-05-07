@@ -2,6 +2,7 @@
 import Experience from '../experience.js'
 import Grass from './Grass.js'
 import metaData from './metaData.js'
+import Road from './Road.js'
 import Tree from './Tree.js'
 
 export default class Map {
@@ -11,6 +12,7 @@ export default class Map {
     this.scene = this.experience.scene
     this.resources = this.experience.resources
     this.debug = this.experience.debug
+    this.rowIndex = 0
 
     // 地图元数据（可扩展）
     this.metadata = metaData
@@ -20,6 +22,8 @@ export default class Map {
     this.grassRows = []
     // 存储树对象
     this.treeRows = []
+    // 存储道路对象
+    this.roadRows = []
 
     // 初始化地图
     this.initializeMap()
@@ -37,14 +41,19 @@ export default class Map {
     this.addGrassRow(-3)
     this.addGrassRow(-2)
     this.addGrassRow(-1)
-
+    this.addGrassRow(0)
     // 使用 forEach 遍历所有行
-    this.metadata.forEach((rowData, rowIndex) => {
-      // 先生成草地
-      this.addGrassRow(rowIndex)
+    this.metadata.forEach((rowData) => {
+      this.rowIndex++
       // 如果是森林行，添加树
       if (rowData && rowData.type === 'forest') {
-        this.addTreeRow(rowData.trees, rowIndex)
+        // 先生成草地
+        this.addGrassRow(this.rowIndex)
+        this.addTreeRow(rowData.trees, this.rowIndex)
+      }
+      if (rowData && rowData.type === 'road') {
+        this.addRoadRow(this.rowIndex)
+        this.addRoadRow(++this.rowIndex)
       }
     })
   }
@@ -60,6 +69,12 @@ export default class Map {
   addTreeRow(trees, rowIndex) {
     const treeRow = new Tree(this.scene, this.resources, trees, rowIndex)
     this.treeRows.push(treeRow)
+  }
+
+  // 添加一行道路
+  addRoadRow(rowIndex = 0) {
+    const road = new Road(this.scene, this.resources, rowIndex)
+    this.roadRows.push(road)
   }
 
   // 扩展地图（可根据需要实现）
@@ -80,6 +95,9 @@ export default class Map {
     // 移除所有树对象
     this.treeRows.forEach(treeRow => treeRow.remove())
     this.treeRows = []
+    // 移除所有道路对象
+    this.roadRows.forEach(road => road.remove())
+    this.roadRows = []
     // 重新初始化
     this.initializeMap()
   }

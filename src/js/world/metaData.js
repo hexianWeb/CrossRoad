@@ -36,6 +36,9 @@ const metaData = [
       { tileIndex: 6, type: 'tree04' },
     ],
   },
+  {
+    type: 'road',
+  },
 ]
 
 export default metaData
