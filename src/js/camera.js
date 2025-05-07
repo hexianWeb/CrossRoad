@@ -14,8 +14,8 @@ export default class Camera {
     this.debug = this.experience.debug
     this.debugActive = this.experience.debug.active
 
-    this.position = new THREE.Vector3(0, 0, 1)
-    this.target = new THREE.Vector3(0, 0, 0)
+    this.position = new THREE.Vector3(5, 5, 5)
+    this.target = new THREE.Vector3(0, 1.5, 0)
 
     this.setInstance()
     this.setControls()
@@ -25,7 +25,7 @@ export default class Camera {
   setInstance() {
     if (this.orthographic) {
       const aspect = this.sizes.aspect
-      this.frustumSize = 1
+      this.frustumSize = 5
 
       this.instance = new THREE.OrthographicCamera(
         -this.frustumSize * aspect,
@@ -101,10 +101,10 @@ export default class Camera {
     if (this.orthographic) {
       const aspect = this.sizes.width / this.sizes.height
 
-      this.instance.left = (-this.frustumSize * aspect) / 2
-      this.instance.right = (this.frustumSize * aspect) / 2
-      this.instance.top = this.frustumSize / 2
-      this.instance.bottom = -this.frustumSize / 2
+      this.instance.left = (-this.frustumSize * aspect)
+      this.instance.right = (this.frustumSize * aspect)
+      this.instance.top = this.frustumSize
+      this.instance.bottom = -this.frustumSize
 
       this.instance.updateProjectionMatrix()
     }

@@ -19,10 +19,10 @@ export default class Renderer {
       antialias: true,
     })
     this.instance.toneMapping = THREE.ACESFilmicToneMapping
-    this.instance.toneMappingExposure = 1
+    this.instance.toneMappingExposure = 1.0
     this.instance.shadowMap.enabled = true
     this.instance.shadowMap.type = THREE.PCFSoftShadowMap
-    this.instance.setClearColor('#000000')
+    this.instance.setClearColor('#f7f3e8')
     this.instance.setSize(this.sizes.width, this.sizes.height)
     this.instance.setPixelRatio(this.sizes.pixelRatio)
   }

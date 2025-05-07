@@ -3,6 +3,7 @@ import * as THREE from 'three'
 import Experience from '../experience.js'
 import Environment from './environment.js'
 import Map from './Map.js'
+import User from './User.js'
 
 export default class World {
   constructor() {
@@ -15,8 +16,9 @@ export default class World {
     // Environment
     this.resources.on('ready', () => {
       // Setup
-      this.map = new Map()
       this.environment = new Environment()
+      this.map = new Map()
+      this.user = new User()
     })
   }
 
