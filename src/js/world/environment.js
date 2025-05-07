@@ -23,16 +23,20 @@ export default class Environment {
 
   setSunLight() {
     this.sunLightColor = '#ffffff'
-    this.sunLightIntensity = 1.5
+    this.sunLightIntensity = 2.5
     this.sunLight = new THREE.DirectionalLight(
       this.sunLightColor,
       this.sunLightIntensity,
     )
     this.sunLight.castShadow = true
     this.sunLight.shadow.camera.far = 60
-    this.sunLight.shadow.mapSize.set(1024, 1024)
+    this.sunLight.shadow.camera.left = -10
+    this.sunLight.shadow.camera.right = 10
+    this.sunLight.shadow.camera.top = 10
+    this.sunLight.shadow.camera.bottom = -10
+    this.sunLight.shadow.mapSize.set(2048, 2048)
     this.sunLight.shadow.normalBias = 0.05
-    this.sunLightPosition = new THREE.Vector3(10, 10, 4.5)
+    this.sunLightPosition = new THREE.Vector3(17, 12, 6.5)
     this.sunLight.position.copy(this.sunLightPosition)
     this.scene.add(this.sunLight)
 
@@ -49,7 +53,7 @@ export default class Environment {
 
   setEnvironmentMap() {
     this.environmentMap = {}
-    this.environmentMap.intensity = 1
+    this.environmentMap.intensity = 0.3
     this.environmentMap.texture = this.resources.items.environmentMapTexture
     this.environmentMap.texture.colorSpace = THREE.SRGBColorSpace
 
@@ -116,6 +120,49 @@ export default class Environment {
           step: 0.1,
         })
         .on('change', this.updateSunLightIntensity.bind(this))
+
+      // 添加 shadowCamera 参数调控
+      const shadowCamera = this.sunLight.shadow.camera
+      const shadowCameraFolder = sunLightFolder.addFolder({
+        title: 'Shadow Camera',
+        expanded: false,
+      })
+      shadowCameraFolder.addBinding(shadowCamera, 'left', {
+        label: 'Shadow Left',
+        min: -100,
+        max: 0,
+        step: 0.1,
+      }).on('change', () => {
+        shadowCamera.updateProjectionMatrix()
+        this.helper.update()
+      })
+      shadowCameraFolder.addBinding(shadowCamera, 'right', {
+        label: 'Shadow Right',
+        min: 0,
+        max: 100,
+        step: 0.1,
+      }).on('change', () => {
+        shadowCamera.updateProjectionMatrix()
+        this.helper.update()
+      })
+      shadowCameraFolder.addBinding(shadowCamera, 'top', {
+        label: 'Shadow Top',
+        min: 0,
+        max: 100,
+        step: 0.1,
+      }).on('change', () => {
+        shadowCamera.updateProjectionMatrix()
+        this.helper.update()
+      })
+      shadowCameraFolder.addBinding(shadowCamera, 'bottom', {
+        label: 'Shadow Bottom',
+        min: -100,
+        max: 0,
+        step: 0.1,
+      }).on('change', () => {
+        shadowCamera.updateProjectionMatrix()
+        this.helper.update()
+      })
 
       sunLightFolder.addBinding(this.helper, 'visible', {
         label: 'Helper',

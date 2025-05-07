@@ -30,6 +30,12 @@ export default class Road {
       const tileIndex = minTileIndex + i
       // 克隆道路模型
       const roadMesh = roadResource.scene.clone()
+      // 递归设置所有 mesh 可接收阴影
+      roadMesh.traverse((child) => {
+        if (child.isMesh) {
+          child.receiveShadow = true // 道路接收阴影
+        }
+      })
       // 设置道路在世界坐标中的位置
       roadMesh.position.set(tileIndex * 4, 0, this.rowIndex)
       // 可根据需要调整缩放、旋转等

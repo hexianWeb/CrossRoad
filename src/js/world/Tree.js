@@ -26,8 +26,14 @@ export default class Tree {
       }
       // 克隆树模型
       const treeMesh = treeResource.scene.clone()
+      // 递归设置所有 mesh 可投射阴影
+      treeMesh.traverse((child) => {
+        if (child.isMesh) {
+          child.castShadow = true // 树木产生阴影
+        }
+      })
       // 设置树的位置（x轴为tileIndex，z轴为rowIndex）
-      treeMesh.position.set(tileIndex, 0.2, this.rowIndex)
+      treeMesh.position.set(tileIndex * 2, 0.2, this.rowIndex)
       // 添加到场景
       this.scene.add(treeMesh)
       // 存储树对象，便于后续移除

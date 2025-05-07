@@ -13,7 +13,7 @@ export default class User {
     // 存储小鸡模型对象
     this.chicken = null
     // scale参数用于等比例缩放
-    this.scale = 1.15
+    this.scale = 1.0
 
     // 初始化主角
     this.initChicken()
