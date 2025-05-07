@@ -35,6 +35,11 @@ export default [
     path: './model/chicken.glb',
   },
   {
+    name: 'grassLong',
+    type: 'gltfModel',
+    path: './model/grass.glb',
+  },
+  {
     name: 'grass',
     type: 'gltfModel',
     path: './model/grass02.glb',
@@ -67,6 +72,6 @@ export default [
   {
     name: 'tile',
     type: 'gltfModel',
-    path: './model/tile.glb',
+    path: './model/grass02.glb',
   },
 ]
