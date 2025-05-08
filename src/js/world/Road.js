@@ -39,7 +39,7 @@ export default class Road {
       // 设置道路在世界坐标中的位置
       roadMesh.position.set(tileIndex * 4, 0, this.rowIndex)
       // 可根据需要调整缩放、旋转等
-      // roadMesh.scale.set(1, 1, 1)
+      roadMesh.scale.set(1, 1, 1)
       this.scene.add(roadMesh)
       this.tiles.push(roadMesh)
     }

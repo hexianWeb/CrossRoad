@@ -13,7 +13,7 @@ export default class Map {
     this.scene = this.experience.scene
     this.resources = this.experience.resources
     this.debug = this.experience.debug
-    this.rowIndex = 0
+    this.rowIndex = -1
 
     // 地图元数据（可扩展）
     this.metadata = metaData
@@ -44,7 +44,6 @@ export default class Map {
     this.addGrassRow(-3)
     this.addGrassRow(-2)
     this.addGrassRow(-1)
-    this.addGrassRow(0)
     // 使用 forEach 遍历所有行
     this.metadata.forEach((rowData) => {
       this.rowIndex++
@@ -56,7 +55,7 @@ export default class Map {
       }
       if (rowData && rowData.type === 'road') {
         this.addRoadRow(this.rowIndex)
-        this.addRoadRow(++this.rowIndex)
+        // this.addRoadRow(++this.rowIndex)
         this.addCarRow(rowData.vehicles, this.rowIndex, rowData.direction, rowData.speed)
       }
     })
