@@ -26,5 +26,8 @@ export default class World {
     if (this.map) {
       this.map.update()
     }
+    if (this.user) {
+      this.user.update()
+    }
   }
 }

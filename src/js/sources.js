@@ -35,6 +35,11 @@ export default [
     path: './model/chicken.glb',
   },
   {
+    name: 'bigChicken',
+    type: 'gltfModel',
+    path: './model/bigchickenPbr02.glb',
+  },
+  {
     name: 'grass',
     type: 'gltfModel',
     path: './model/grass.glb',
