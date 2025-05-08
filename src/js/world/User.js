@@ -1,7 +1,9 @@
+import gsap from 'gsap' // 引入 gsap 用于动画
 import * as THREE from 'three'
 // User.js
 // 负责主角小鸡的加载与管理
 import Experience from '../experience.js'
+import metaData from './metaData.js'
 
 export default class User {
   constructor() {
@@ -12,9 +14,9 @@ export default class User {
     this.debug = this.experience.debug
 
     // 存储小鸡模型对象
-    this.chicken = null
+    this.instance = null
     // scale参数用于等比例缩放
-    this.scale = 0.56
+    this.scale = 0.30
 
     // 维护移动队列
     this.movesQueue = []
@@ -28,6 +30,9 @@ export default class User {
     this.moveClock = new THREE.Clock(false)
     // 步长（每步移动1格）
     this.stepLength = 1
+
+    this.agentGroup = new THREE.Group() // 新增 agentGroup，负责水平移动
+    this.scene.add(this.agentGroup)     // 将 agentGroup 添加到场景
 
     // 初始化主角
     this.initChicken()
@@ -44,20 +49,20 @@ export default class User {
 
   // 加载并放置小鸡模型
   initChicken() {
-    // 获取 chicken 资源
+    // 获取 instance 资源
     const chickenResource = this.resources.items.bigChicken
     if (!chickenResource) {
-      console.warn('未找到 chicken 资源')
+      console.warn('未找到 instance 资源')
       return
     }
     // 克隆模型，避免资源污染
-    this.chicken = chickenResource.scene.clone()
-    // 设置主角位置为 (0,0,0)
-    this.chicken.position.set(0, 0.22, 0)
+    this.instance = chickenResource.scene.clone()
+    // 只设置 y 方向初始高度
+    this.instance.position.set(0, 0.22, 0)
     // 设置初始等比例缩放
-    this.chicken.scale.set(this.scale, this.scale, this.scale)
-    // 添加到场景
-    this.scene.add(this.chicken)
+    this.instance.scale.set(this.scale, this.scale, this.scale)
+    // 添加到 agentGroup
+    this.agentGroup.add(this.instance)
   }
 
   // 调试面板：可调整主角的等比例缩放和位置
@@ -74,14 +79,10 @@ export default class User {
       step: 0.01,
     }).on('change', (_unused) => {
       // 同步到chicken模型
-      if (this.chicken) {
-        this.chicken.scale.set(this.scale, this.scale, this.scale)
+      if (this.instance) {
+        this.instance.scale.set(this.scale, this.scale, this.scale)
       }
     })
-    // 位置调节
-    this.debugFolder.addBinding(this.chicken.position, 'x', { label: '位置X', min: -10, max: 10, step: 0.01 })
-    this.debugFolder.addBinding(this.chicken.position, 'y', { label: '位置Y', min: -10, max: 10, step: 0.01 })
-    this.debugFolder.addBinding(this.chicken.position, 'z', { label: '位置Z', min: -10, max: 10, step: 0.01 })
   }
 
   // 监听键盘事件，使用 event.code 适配非QWERTY键盘
@@ -121,27 +122,41 @@ export default class User {
 
   // update方法：每帧调用，处理移动逻辑
   update() {
-    if (!this.chicken)
+    if (!this.instance)
       return
-    // 如果没有移动指令，直接返回
     if (!this.movesQueue.length)
       return
 
-    // 如果当前不在移动，启动移动
+    // 计算下一步目标格子
     if (!this.isMoving) {
+      const dir = this.movesQueue[0]
+      const nextTarget = { ...this.currentTile }
+      if (dir === 'forward')
+        nextTarget.z -= 1
+      if (dir === 'backward')
+        nextTarget.z += 1
+      if (dir === 'left')
+        nextTarget.x -= 1
+      if (dir === 'right')
+        nextTarget.x += 1
+
+      // 先设置旋转，让小鸡朝向尝试方向
+      this.startRot = this.instance.rotation.y
+      this.endRot = this.getTargetRotation(dir)
+      this.setRotation(1) // 直接转到目标朝向
+
+      // 检查是否合法
+      if (!this.endsUpInValidPosition(nextTarget)) {
+        // 不合法，执行 yoyo 动画并丢弃本次指令
+        this.playYoyoAnimation(nextTarget)
+        this.movesQueue.shift()
+        return
+      }
+
+      // 启动移动
       this.isMoving = true
       this.moveClock.start()
-      // 计算目标格子
-      const dir = this.movesQueue[0]
-      this.targetTile = { ...this.currentTile }
-      if (dir === 'forward')
-        this.targetTile.z -= 1
-      if (dir === 'backward')
-        this.targetTile.z += 1
-      if (dir === 'left')
-        this.targetTile.x -= 1
-      if (dir === 'right')
-        this.targetTile.x += 1
+      this.targetTile = nextTarget
       // 记录起始位置
       this.startPos = {
         x: this.currentTile.x * this.stepLength,
@@ -151,9 +166,6 @@ export default class User {
         x: this.targetTile.x * this.stepLength,
         z: this.targetTile.z * this.stepLength,
       }
-      // 记录起始旋转
-      this.startRot = this.chicken.rotation.y
-      this.endRot = this.getTargetRotation(dir)
     }
 
     // 步进动画
@@ -172,27 +184,27 @@ export default class User {
     }
   }
 
-  // 设置主角位置（XOZ平面+跳跃）
+  // 设置主角位置（agentGroup 只负责 x/z，instance 只负责 y）
   setPosition(progress) {
-    if (!this.chicken)
+    if (!this.instance)
       return
     // 水平插值
     const x = THREE.MathUtils.lerp(this.startPos.x, this.endPos.x, progress)
     const z = THREE.MathUtils.lerp(this.startPos.z, this.endPos.z, progress)
+    // agentGroup 只负责水平移动
+    this.agentGroup.position.set(x, 0, z)
     // 跳跃高度（正弦曲线）
     const jumpHeight = Math.sin(progress * Math.PI) * 0.28 // 跳跃最大高度
-    this.chicken.position.set(x, 0.22 + jumpHeight, z)
-
+    this.instance.position.y = 0.22 + jumpHeight // instance 只负责竖直跳跃
     // squash and stretch 动画：scale.y 在起跳和落地时压缩，最高点恢复
-    // 计算压缩系数，progress=0/1时最小，0.5时最大
     const squash = 0.85 + 0.15 * Math.sin(progress * Math.PI) // y轴缩放
     const stretch = 1.0 + 0.15 * (1 - Math.sin(progress * Math.PI)) // x/z轴略微拉伸
-    this.chicken.scale.set(this.scale * stretch, this.scale * squash, this.scale * stretch)
+    this.instance.scale.set(this.scale * stretch, this.scale * squash, this.scale * stretch)
   }
 
   // 设置主角旋转（始终最短路径）
   setRotation(progress) {
-    if (!this.chicken)
+    if (!this.instance)
       return
     // 计算最短旋转路径
     let delta = this.endRot - this.startRot
@@ -201,21 +213,23 @@ export default class User {
     if (delta < -Math.PI)
       delta += 2 * Math.PI
     const y = this.startRot + delta * progress
-    this.chicken.rotation.y = y
+    this.instance.rotation.y = y
   }
 
   // 步进完成，更新当前格子
   stepCompleted() {
     this.currentTile = { ...this.targetTile }
-    // 保证最终位置精确
-    this.chicken.position.set(
+    // agentGroup 归位到目标格子 x/z
+    this.agentGroup.position.set(
       this.currentTile.x * this.stepLength,
-      0.22,
+      0,
       this.currentTile.z * this.stepLength,
     )
-    this.chicken.rotation.y = this.endRot
+    // instance 归位到初始高度
+    this.instance.position.y = 0.22
+    this.instance.rotation.y = this.endRot
     // 恢复正常缩放
-    this.chicken.scale.set(this.scale, this.scale, this.scale)
+    this.instance.scale.set(this.scale, this.scale, this.scale)
   }
 
   // 根据移动方向获取目标旋转
@@ -229,6 +243,83 @@ export default class User {
     if (dir === 'backward')
       return 0
     return 0
+  }
+
+  // 判断下一步是否为有效位置
+  endsUpInValidPosition(targetTile) {
+    // 1. 边界检查
+    if (targetTile.x < -8 || targetTile.x > 8)
+      return false
+    if (targetTile.z <= -5)
+      return false
+
+    // 2. 检查 metaData 是否有树
+    // metaData 行数与 z 对应，z 可能为负，需偏移
+
+    const rowIndex = targetTile.z
+    const row = metaData[rowIndex]
+    if (row && row.type === 'forest') {
+      // 检查该行是否有树在目标 x
+      if (row.trees.some(tree => tree.tileIndex === targetTile.x)) {
+        return false
+      }
+    }
+    return true
+  }
+
+  // yoyo 动画：尝试移动但弹回原位（agentGroup 只做 x/z，instance 只做 y）
+  playYoyoAnimation(targetTile) {
+    if (!this.instance)
+      return
+    // 计算目标位置
+    const from = {
+      x: this.currentTile.x * this.stepLength,
+      z: this.currentTile.z * this.stepLength,
+    }
+    const to = {
+      x: targetTile.x * this.stepLength,
+      z: targetTile.z * this.stepLength,
+    }
+    const delta = {
+      x: (to.x - from.x) * 0.8,
+      z: (to.z - from.z) * 0.8,
+    }
+    // agentGroup 只做 x/z 的 yoyo
+    gsap.to(this.agentGroup.position, {
+      x: to.x - delta.x,
+      z: to.z - delta.z,
+      duration: 0.12,
+      yoyo: true,
+      repeat: 1,
+      ease: 'power1.inOut',
+      onComplete: () => {
+        this.agentGroup.position.set(from.x, 0, from.z)
+      }
+    })
+    // instance 只做 y 的弹跳
+    gsap.to(this.instance.position, {
+      y: 0.50,
+      duration: 0.12,
+      yoyo: true,
+      repeat: 1,
+      ease: 'power1.inOut',
+      onComplete: () => {
+        this.instance.position.y = 0.22
+      }
+    })
+    // scale 弹跳动画（squash & stretch）
+    gsap.to(this.instance.scale, {
+      x: this.scale * 0.7, // x/z 轴拉伸
+      y: this.scale * 1.18, // y 轴压缩
+      z: this.scale * 0.7,
+      duration: 0.12,
+      yoyo: true,
+      repeat: 1,
+      ease: 'power1.inOut',
+      onComplete: () => {
+        this.instance.scale.set(this.scale, this.scale, this.scale)
+      }
+    })
   }
 
   // 可扩展：主角移动、动画等方法
