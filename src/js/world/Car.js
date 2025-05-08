@@ -45,7 +45,7 @@ export default class Car {
         }
       })
       // 设置车辆位置（x轴为tileIndex*4，z轴为rowIndex）
-      carMesh.position.set(initialTileIndex * 4, 0.25, this.rowIndex)
+      carMesh.position.set(initialTileIndex, 0.25, this.rowIndex)
       // 设置车辆朝向
       if (this.direction) {
         carMesh.rotation.y = 0 // 向右

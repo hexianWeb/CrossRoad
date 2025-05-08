@@ -29,6 +29,9 @@ export default class World {
   update() {
     if (this.map) {
       this.map.update()
+      if (this.user) {
+        this.map.checkAndExtendMap(this.user.currentTile.z)
+      }
     }
     if (this.user) {
       this.camera.instance.lookAt(this.user.agentGroup.position)

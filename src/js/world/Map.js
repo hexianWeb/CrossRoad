@@ -5,6 +5,7 @@ import Grass from './Grass.js'
 import metaData from './metaData.js'
 import Road from './Road.js'
 import Tree from './Tree.js'
+import generateMetaRows from './generateMetaRows.js'
 
 export default class Map {
   constructor() {
@@ -60,7 +61,7 @@ export default class Map {
       }
     })
   }
-
+ 
   // 添加一行草地
   addGrassRow(rowIndex = 0) {
     const grass = new Grass(this.scene, this.resources, rowIndex)
@@ -86,9 +87,37 @@ export default class Map {
     this.carRows.push(carRow)
   }
 
-  // 扩展地图（可根据需要实现）
-  extendMap(_newMetadata) {
-    // TODO: 扩展地图逻辑
+  // 扩展地图，生成并渲染新行
+  extendMap(N = 10) {
+    console.log('更新地图');
+    
+    const startRowIndex = this.metadata.length
+    const newRows = generateMetaRows(startRowIndex, N)
+    this.metadata.push(...newRows)
+    console.log(newRows);
+    console.log(this.rowIndex);
+    
+    // 渲染新行
+    newRows.forEach((rowData, i) => {
+      this.rowIndex++
+      if (rowData.type === 'forest') {
+        this.addGrassRow(this.rowIndex)
+        this.addTreeRow(rowData.trees, this.rowIndex)
+      }
+      if (rowData.type === 'road') {
+        this.addRoadRow(this.rowIndex)
+        this.addCarRow(rowData.vehicles, this.rowIndex, rowData.direction, rowData.speed)
+      }
+    })
+  }
+
+  // 检查玩家距离地图末尾距离，自动扩展
+  checkAndExtendMap(userZ) {
+    // userZ 为玩家当前 z 坐标（负数，越小越远）
+    const remainRows = this.metadata.length - Math.abs(userZ)
+    if (remainRows < 20) {      
+      this.extendMap(20)
+    }
   }
 
   // 重置地图
