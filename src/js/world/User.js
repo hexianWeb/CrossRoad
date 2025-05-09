@@ -58,6 +58,12 @@ export default class User {
     }
     // 克隆模型，避免资源污染
     this.instance = chickenResource.scene.clone()
+    // 显示阴影
+    this.instance.traverse((child) => {
+      if (child instanceof THREE.Mesh) {
+        child.castShadow = true
+      }
+    })
     // 只设置 y 方向初始高度
     this.instance.position.set(0, 0.22, 0)
     // 设置初始等比例缩放
@@ -293,6 +299,11 @@ export default class User {
   reset() {
     // 重置位置状态
     this.currentTile = {
+      x: 0,
+      z: 0,
+    }
+
+    this.targetTile = {
       x: 0,
       z: 0,
     }

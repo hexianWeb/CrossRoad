@@ -15,7 +15,7 @@ export default class Map {
     this.scene = this.experience.scene
     this.resources = this.experience.resources
     this.debug = this.experience.debug
-    this.rowIndex = -1
+    this.rowIndex = 0
 
     // 地图元数据（可扩展）
     this.metadata = metaData
@@ -29,6 +29,8 @@ export default class Map {
     this.roadRows = []
     // 存储车辆对象
     this.carRows = []
+    // 新增：行号到车辆mesh数组的映射
+    this.carMeshDict = {}
 
     // 初始化地图
     this.initializeMap()
@@ -41,11 +43,14 @@ export default class Map {
 
   // 初始化地图内容
   initializeMap() {
+    // 重置 rowIndex
+    this.rowIndex = 0
     this.addGrassRow(-5)
     this.addGrassRow(-4)
     this.addGrassRow(-3)
     this.addGrassRow(-2)
     this.addGrassRow(-1)
+    this.addGrassRow(0)
     // 使用 forEach 遍历所有行
     this.metadata.forEach((rowData) => {
       this.rowIndex++
@@ -57,12 +62,11 @@ export default class Map {
       }
       if (rowData && rowData.type === 'road') {
         this.addRoadRow(this.rowIndex)
-        // this.addRoadRow(++this.rowIndex)
         this.addCarRow(rowData.vehicles, this.rowIndex, rowData.direction, rowData.speed)
       }
     })
   }
- 
+
   // 添加一行草地
   addGrassRow(rowIndex = 0) {
     const grass = new Grass(this.scene, this.resources, rowIndex)
@@ -86,20 +90,18 @@ export default class Map {
   addCarRow(vehicles, rowIndex = 0, direction = false, speed = 1) {
     const carRow = new Car(this.scene, this.resources, vehicles, rowIndex, direction, speed)
     this.carRows.push(carRow)
+    // 新增：记录每行车辆mesh
+    this.carMeshDict[rowIndex] = carRow.getCarMeshes()
   }
 
   // 扩展地图，生成并渲染新行
   extendMap(N = 10) {
-    console.log('更新地图');
-    
     const startRowIndex = this.metadata.length
     const newRows = generateMetaRows(startRowIndex, N)
     this.metadata.push(...newRows)
-    console.log(newRows);
-    console.log(this.rowIndex);
-    
+
     // 渲染新行
-    newRows.forEach((rowData, i) => {
+    newRows.forEach((rowData) => {
       this.rowIndex++
       if (rowData.type === 'forest') {
         this.addGrassRow(this.rowIndex)
@@ -161,5 +163,15 @@ export default class Map {
       label: '重置地图',
       onClick: () => this.resetMap(),
     })
+    this.debugFolder.addButton({
+      title: '扩展地图',
+      label: '扩展地图',
+      onClick: () => this.extendMap(GENERATION_COUNT),
+    })
+  }
+
+  // 新增：获取指定行的车辆mesh数组
+  getCarMeshesByRow(rowIndex) {
+    return this.carMeshDict[rowIndex] || []
   }
 }

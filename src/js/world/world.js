@@ -22,7 +22,6 @@ export default class World {
       // 相机只跟随 user 的 agentGroup 水平移动
       this.user.agentGroup.add(this.camera.instance)
       this.user.agentGroup.add(this.environment.sunLight)
-
     })
   }
 
@@ -31,6 +30,23 @@ export default class World {
       this.map.update()
       if (this.user) {
         this.map.checkAndExtendMap(this.user.currentTile.z)
+        // === 碰撞检测 ===
+        // 获取玩家mesh和所在行
+        const playerMesh = this.user.instance
+        if (playerMesh) {
+          const playerRow = this.user.currentTile.z
+          const carMeshes = this.map.getCarMeshesByRow(playerRow)
+          if (carMeshes.length > 0) {
+            // 构建玩家包围盒
+            const playerBox = new THREE.Box3().setFromObject(playerMesh)
+            for (const carMesh of carMeshes) {
+              const carBox = new THREE.Box3().setFromObject(carMesh)
+              if (playerBox.intersectsBox(carBox)) {
+                this.onGameOver()
+              }
+            }
+          }
+        }
       }
     }
     if (this.user) {
@@ -38,5 +54,14 @@ export default class World {
       this.environment.sunLight.target.position.copy(this.user.agentGroup.position)
       this.user.update()
     }
+  }
+
+  // 游戏结束处理方法
+  onGameOver() {
+    // 这里可以自定义游戏结束逻辑，比如弹窗、重置、跳转等
+    // 目前简单用alert
+    this.map.resetMap()
+    // TODO: 可扩展为更优雅的UI提示或重置逻辑
+    this.user.reset()
   }
 }

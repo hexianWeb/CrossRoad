@@ -108,7 +108,7 @@ export function endsUpInValidPosition(targetTile, metaData) {
 
   // 2. 检查 metaData 是否有树
   const rowIndex = targetTile.z
-  const row = metaData[rowIndex]
+  const row = metaData[rowIndex - 1]
   if (row && row.type === 'forest') {
     // 检查该行是否有树在目标 x
     if (row.trees.some(tree => tree.tileIndex === targetTile.x)) {
