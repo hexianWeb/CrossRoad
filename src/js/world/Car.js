@@ -56,7 +56,7 @@ export default class Car {
         }
       })
       // 设置车辆位置（x轴为tileIndex*4，z轴为rowIndex）
-      carMesh.position.set(initialTileIndex, 0.25, this.rowIndex)
+      carMesh.position.set(initialTileIndex, 0.35, this.rowIndex)
       // 设置车辆朝向
       if (this.direction) {
         carMesh.rotation.y = 0 // 向右
@@ -115,7 +115,7 @@ export default class Car {
       // 叠加两组不同频率的正弦波，幅度小
       const freq1 = 2.5
       const amp1 = 0.02
-      const freq2 = 6.3
+      const freq2 = 4.3
       const amp2 = 0.01
       // 计算抖动偏移
       const offsetY = Math.sin(t * freq1 + shake.phase) * amp1 + Math.cos(t * freq2 + shake.phase * 1.3) * amp2

@@ -94,4 +94,24 @@ export default [
     type: 'gltfModel',
     path: './model/car04.glb',
   },
+  {
+    name: 'car05',
+    type: 'gltfModel',
+    path: './model/car05.glb',
+  },
+  {
+    name: 'car06',
+    type: 'gltfModel',
+    path: './model/car06.glb',
+  },
+  {
+    name: 'car07',
+    type: 'gltfModel',
+    path: './model/car07.glb',
+  },
+  {
+    name: 'car08',
+    type: 'gltfModel',
+    path: './model/car08.glb',
+  },
 ]
