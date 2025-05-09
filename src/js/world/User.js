@@ -4,7 +4,7 @@ import * as THREE from 'three'
 // 负责主角小鸡的加载与管理
 import Experience from '../experience.js'
 import metaData from './metaData.js'
-import { endsUpInValidPosition, getTargetRotation } from './tool.js'
+import { endsUpInValidPosition, getSwipeDirection, getTargetRotation, isMobile } from './tool.js'
 
 export default class User {
   constructor() {
@@ -46,6 +46,11 @@ export default class User {
     // 绑定键盘事件
     this.pressedKeys = new Set()
     this.listenKeyboard()
+
+    // 移动端启用滑动操控
+    if (isMobile()) {
+      this.listenTouch()
+    }
   }
 
   // 加载并放置小鸡模型
@@ -124,6 +129,28 @@ export default class User {
     })
     window.addEventListener('keyup', (event) => {
       this.pressedKeys.delete(event.code)
+    })
+  }
+
+  // 监听移动端滑动事件，实现滑动控制小鸡移动
+  listenTouch() {
+    let startX = 0
+    let startY = 0
+    window.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1) {
+        startX = e.touches[0].clientX
+        startY = e.touches[0].clientY
+      }
+    })
+    window.addEventListener('touchend', (e) => {
+      if (e.changedTouches.length === 1) {
+        const endX = e.changedTouches[0].clientX
+        const endY = e.changedTouches[0].clientY
+        const dir = getSwipeDirection(startX, startY, endX, endY)
+        if (dir) {
+          this.movesQueue.push(dir)
+        }
+      }
     })
   }
 

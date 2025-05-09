@@ -3,6 +3,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls.js'
 
 import Experience from './experience.js'
+import { isLandscape, isMobile, isPortrait } from './world/tool.js'
 
 export default class Camera {
   constructor(orthographic = false) {
@@ -14,19 +15,20 @@ export default class Camera {
     this.debug = this.experience.debug
     this.debugActive = this.experience.debug.active
 
-    this.position = new THREE.Vector3(5, 5, 5)
+    this.position = this.getAdaptivePosition()
     this.target = new THREE.Vector3(0, 1.5, 0)
 
     this.setInstance()
     this.setControls()
     this.setDebug()
+
+    window.addEventListener('resize', this.handleResizeForMobile.bind(this))
   }
 
   setInstance() {
     if (this.orthographic) {
       const aspect = this.sizes.aspect
-      this.frustumSize = 5
-
+      this.frustumSize = this.getAdaptiveFrustumSize()
       this.instance = new THREE.OrthographicCamera(
         -this.frustumSize * aspect,
         this.frustumSize * aspect,
@@ -39,7 +41,7 @@ export default class Camera {
     else {
       this.instance = new THREE.PerspectiveCamera(
         34,
-        this.sizes.width / this.sizes.height,
+        this.sizes.aspect,
         0.1,
         100,
       )
@@ -52,6 +54,8 @@ export default class Camera {
   setControls() {
     // OrbitControls 设置
     this.orbitControls = new OrbitControls(this.instance, this.canvas)
+    this.orbitControls.enableRotate = false // 禁用旋转
+    this.orbitControls.enablePan = false // 禁用平移
     this.orbitControls.enableDamping = true
     this.orbitControls.enableZoom = false // 禁用缩放
     this.orbitControls.target.copy(this.target)
@@ -62,6 +66,8 @@ export default class Camera {
     this.trackballControls.noPan = true // 禁用平移
     this.trackballControls.noZoom = false // 启用缩放
     this.trackballControls.zoomSpeed = 1 // 设置缩放速度
+    this.trackballControls.minZoom = 0.5
+    this.trackballControls.maxZoom = 10
 
     // 同步两个控制器的目标点
     this.trackballControls.target.copy(this.target)
@@ -99,24 +105,52 @@ export default class Camera {
 
   resize() {
     if (this.orthographic) {
-      const aspect = this.sizes.width / this.sizes.height
-
+      const aspect = this.sizes.aspect
+      this.frustumSize = this.getAdaptiveFrustumSize()
       this.instance.left = (-this.frustumSize * aspect)
       this.instance.right = (this.frustumSize * aspect)
       this.instance.top = this.frustumSize
       this.instance.bottom = -this.frustumSize
-
       this.instance.updateProjectionMatrix()
     }
     else {
-      this.instance.aspect = this.sizes.width / this.sizes.height
+      this.instance.aspect = this.sizes.aspect
       this.instance.updateProjectionMatrix()
     }
     this.trackballControls.handleResize()
+
+    this.handleResizeForMobile()
   }
 
   update() {
     this.orbitControls.update()
     this.trackballControls.update()
+  }
+
+  getAdaptivePosition() {
+    if (isMobile()) {
+      if (isLandscape()) {
+        return new THREE.Vector3(3, 4, 6)
+      }
+      else if (isPortrait()) {
+        return new THREE.Vector3(6, 4, 4.6)
+      }
+    }
+    return new THREE.Vector3(2.5, 4.3, 7.03)
+  }
+
+  handleResizeForMobile() {
+    if (isMobile()) {
+      this.position = this.getAdaptivePosition()
+      this.updateCamera()
+    }
+  }
+
+  getAdaptiveFrustumSize() {
+    if (isMobile()) {
+      return 4
+    }
+    // PC端
+    return 3
   }
 }

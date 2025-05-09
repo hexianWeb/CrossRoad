@@ -1,4 +1,5 @@
-import { CAR_BOUNDARY_MAX, CAR_BOUNDARY_MIN, maxTileIndex, minTileIndex } from '../constants'
+import { CAR_BOUNDARY_MAX, CAR_BOUNDARY_MIN, maxTileIndex, minTileIndex, SWIPE_THRESHOLD } from '../constants'
+
 // 随机生成 N 行地图元数据
 
 function getRandomInt(min, max) {
@@ -62,7 +63,7 @@ export default function generateMetaRows(startRowIndex, N = 20) {
         }
         vehicles.push({
           initialTileIndex: tileIndex,
-          type: `car0${getRandomInt(1, 2)}`,
+          type: `car0${getRandomInt(1, 8)}`,
         })
       }
       rows.push({
@@ -116,4 +117,71 @@ export function endsUpInValidPosition(targetTile, metaData) {
     }
   }
   return true
+}
+
+/**
+ * 计算滑动方向
+ * @param {number} startX 起始X
+ * @param {number} startY 起始Y
+ * @param {number} endX 结束X
+ * @param {number} endY 结束Y
+ * @returns {string|null} 'forward' | 'backward' | 'left' | 'right' | null
+ */
+export function getSwipeDirection(startX, startY, endX, endY) {
+  const dx = endX - startX
+  const dy = endY - startY
+  // 使用常量控制滑动灵敏度
+  if (Math.abs(dx) < SWIPE_THRESHOLD && Math.abs(dy) < SWIPE_THRESHOLD)
+    return null // 滑动距离太短忽略
+
+  if (isPortrait()) {
+    // 竖屏时只认斜向滑动
+    // 斜向判定：dx、dy 都不为0，且绝对值相近（tan45度附近）
+    if (dx !== 0 && dy !== 0 && Math.abs(Math.abs(dx) - Math.abs(dy)) < Math.max(Math.abs(dx), Math.abs(dy)) * 0.5) {
+      if (dx < 0 && dy < 0) {
+        // 左上
+        return 'left'
+      }
+      else if (dx < 0 && dy > 0) {
+        // 左下
+        return 'backward'
+      }
+      else if (dx > 0 && dy > 0) {
+        // 右下
+        return 'right'
+      }
+      else if (dx > 0 && dy < 0) {
+        // 右上
+        return 'forward'
+      }
+    }
+    // 非斜向滑动不响应
+    return null
+  }
+  else {
+    // 横屏/PC端，保持原有逻辑
+    if (Math.abs(dx) > Math.abs(dy)) {
+      // 横向滑动
+      return dx > 0 ? 'right' : 'left'
+    }
+    else {
+      // 纵向滑动
+      return dy > 0 ? 'backward' : 'forward'
+    }
+  }
+}
+
+// 判断是否为移动端
+export function isMobile() {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+}
+
+// 判断是否为横屏
+export function isLandscape() {
+  return window.innerWidth > window.innerHeight
+}
+
+// 判断是否为竖屏
+export function isPortrait() {
+  return window.innerHeight >= window.innerWidth
 }
