@@ -1,11 +1,12 @@
 // 引入 Experience 单例和常量
+import { GENERATION_COUNT } from '../constants.js'
 import Experience from '../experience.js'
 import Car from './Car.js'
 import Grass from './Grass.js'
 import metaData from './metaData.js'
 import Road from './Road.js'
+import generateMetaRows from './tool.js'
 import Tree from './Tree.js'
-import generateMetaRows from './generateMetaRows.js'
 
 export default class Map {
   constructor() {
@@ -115,8 +116,8 @@ export default class Map {
   checkAndExtendMap(userZ) {
     // userZ 为玩家当前 z 坐标（负数，越小越远）
     const remainRows = this.metadata.length - Math.abs(userZ)
-    if (remainRows < 20) {      
-      this.extendMap(20)
+    if (remainRows < GENERATION_COUNT) {
+      this.extendMap(GENERATION_COUNT)
     }
   }
 

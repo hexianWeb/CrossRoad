@@ -4,6 +4,7 @@ import * as THREE from 'three'
 // 负责主角小鸡的加载与管理
 import Experience from '../experience.js'
 import metaData from './metaData.js'
+import { endsUpInValidPosition, getTargetRotation } from './tool.js'
 
 export default class User {
   constructor() {
@@ -32,7 +33,7 @@ export default class User {
     this.stepLength = 1
 
     this.agentGroup = new THREE.Group() // 新增 agentGroup，负责水平移动
-    this.scene.add(this.agentGroup)     // 将 agentGroup 添加到场景
+    this.scene.add(this.agentGroup) // 将 agentGroup 添加到场景
 
     // 初始化主角
     this.initChicken()
@@ -142,11 +143,11 @@ export default class User {
 
       // 先设置旋转，让小鸡朝向尝试方向
       this.startRot = this.instance.rotation.y
-      this.endRot = this.getTargetRotation(dir)
+      this.endRot = getTargetRotation(dir)
       this.setRotation(1) // 直接转到目标朝向
 
       // 检查是否合法
-      if (!this.endsUpInValidPosition(nextTarget)) {
+      if (!endsUpInValidPosition(nextTarget, metaData)) {
         // 不合法，执行 yoyo 动画并丢弃本次指令
         this.playYoyoAnimation(nextTarget)
         this.movesQueue.shift()
@@ -232,41 +233,6 @@ export default class User {
     this.instance.scale.set(this.scale, this.scale, this.scale)
   }
 
-  // 根据移动方向获取目标旋转
-  getTargetRotation(dir) {
-    if (dir === 'forward')
-      return Math.PI
-    if (dir === 'left')
-      return -Math.PI / 2
-    if (dir === 'right')
-      return Math.PI / 2
-    if (dir === 'backward')
-      return 0
-    return 0
-  }
-
-  // 判断下一步是否为有效位置
-  endsUpInValidPosition(targetTile) {
-    // 1. 边界检查
-    if (targetTile.x < -8 || targetTile.x > 8)
-      return false
-    if (targetTile.z <= -5)
-      return false
-
-    // 2. 检查 metaData 是否有树
-    // metaData 行数与 z 对应，z 可能为负，需偏移
-
-    const rowIndex = targetTile.z
-    const row = metaData[rowIndex]
-    if (row && row.type === 'forest') {
-      // 检查该行是否有树在目标 x
-      if (row.trees.some(tree => tree.tileIndex === targetTile.x)) {
-        return false
-      }
-    }
-    return true
-  }
-
   // yoyo 动画：尝试移动但弹回原位（agentGroup 只做 x/z，instance 只做 y）
   playYoyoAnimation(targetTile) {
     if (!this.instance)
@@ -294,7 +260,7 @@ export default class User {
       ease: 'power1.inOut',
       onComplete: () => {
         this.agentGroup.position.set(from.x, 0, from.z)
-      }
+      },
     })
     // instance 只做 y 的弹跳
     gsap.to(this.instance.position, {
@@ -305,7 +271,7 @@ export default class User {
       ease: 'power1.inOut',
       onComplete: () => {
         this.instance.position.y = 0.22
-      }
+      },
     })
     // scale 弹跳动画（squash & stretch）
     gsap.to(this.instance.scale, {
@@ -318,9 +284,27 @@ export default class User {
       ease: 'power1.inOut',
       onComplete: () => {
         this.instance.scale.set(this.scale, this.scale, this.scale)
-      }
+      },
     })
   }
 
   // 可扩展：主角移动、动画等方法
+  // 重置角色位置到起点
+  reset() {
+    // 重置位置状态
+    this.currentTile = {
+      x: 0,
+      z: 0,
+    }
+
+    // 重置 agentGroup 位置
+    this.agentGroup.position.set(0, 0, 0)
+
+    // 重置角色位置和缩放
+    this.instance.position.set(0, 0.22, 0)
+    this.instance.scale.set(this.scale, this.scale, this.scale)
+
+    // 重置角色朝向
+    this.instance.rotation.y = 0
+  }
 }

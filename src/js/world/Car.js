@@ -57,6 +57,7 @@ export default class Car {
       this.scene.add(carMesh)
       // 存储车辆对象，便于后续移除和动画
       this.carMeshes.push(carMesh)
+
       // 记录每辆车的初始y坐标和抖动相位（相位随机，避免同步）
       this.carShakeParams.push({
         baseY: carMesh.position.y,
@@ -76,7 +77,7 @@ export default class Car {
   // 更新车辆位置（可用于动画）
   update() {
     // 获取全局已用时间，单位ms，转为秒
-    const t = this.time.elapsed * 0.001
+    const t = this.time.elapsed * 0.03
     this.carMeshes.forEach((car, idx) => {
       // 车辆移动方向
       const dir = this.direction ? 1 : -1
@@ -93,9 +94,9 @@ export default class Car {
       const shake = this.carShakeParams[idx]
       // 叠加两组不同频率的正弦波，幅度小
       const freq1 = 2.5
-      const amp1 = 0.04
+      const amp1 = 0.02
       const freq2 = 6.3
-      const amp2 = 0.02
+      const amp2 = 0.01
       // 计算抖动偏移
       const offsetY = Math.sin(t * freq1 + shake.phase) * amp1 + Math.cos(t * freq2 + shake.phase * 1.3) * amp2
       car.position.y = shake.baseY + offsetY
