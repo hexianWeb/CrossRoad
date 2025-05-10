@@ -5,13 +5,11 @@ const metaData = [
     trees: [
       { tileIndex: -7, type: 'tree01' },
       { tileIndex: -3, type: 'tree02' },
-
     ],
   },
   {
     type: 'forest',
     trees: [
-
       { tileIndex: -5, type: 'tree01' },
       { tileIndex: 5, type: 'tree04' },
     ],
@@ -20,7 +18,6 @@ const metaData = [
     type: 'forest',
     trees: [
       { tileIndex: -6, type: 'tree03' },
-
     ],
   },
   {

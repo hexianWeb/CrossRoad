@@ -10,7 +10,6 @@ export default class Environment {
     this.debug = this.experience.debug.ui
     this.debugActive = this.experience.debug.active
 
-    // Axes Helper
     this.axesHelper = new THREE.AxesHelper(5)
     this.axesHelper.visible = false
     this.scene.add(this.axesHelper)
@@ -47,7 +46,7 @@ export default class Environment {
     this.scene.add(this.sunLight.target)
 
     this.helper = new THREE.CameraHelper(this.sunLight.shadow.camera)
-    this.helper.visible = true
+    this.helper.visible = false
     this.scene.add(this.helper)
   }
 

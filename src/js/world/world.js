@@ -11,7 +11,6 @@ export default class World {
     this.scene = this.experience.scene
     this.camera = this.experience.camera
     this.resources = this.experience.resources
-    this.scene.add(new THREE.AxesHelper(5))
 
     // Environment
     this.resources.on('ready', () => {
