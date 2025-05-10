@@ -114,4 +114,24 @@ export default [
     type: 'gltfModel',
     path: './model/car08.glb',
   },
+  {
+    name: 'clock',
+    type: 'gltfModel',
+    path: './model/clock.glb',
+  },
+  {
+    name: 'random',
+    type: 'gltfModel',
+    path: './model/random.glb',
+  },
+  {
+    name: 'sheid',
+    type: 'gltfModel',
+    path: './model/sheid.glb',
+  },
+  {
+    name: 'shoe',
+    type: 'gltfModel',
+    path: './model/shoe.glb',
+  },
 ]

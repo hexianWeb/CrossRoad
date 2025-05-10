@@ -1,4 +1,5 @@
 import { CAR_BOUNDARY_MAX, CAR_BOUNDARY_MIN, maxTileIndex, minTileIndex, SWIPE_THRESHOLD } from '../constants'
+import { ITEM_TYPES } from './ItemManager.js' // 引入道具类型
 
 // 随机生成 N 行地图元数据
 
@@ -36,9 +37,27 @@ export default function generateMetaRows(startRowIndex, N = 20) {
           })
         }
       }
+      // 生成道具 items
+      const items = []
+      const itemTypes = [ITEM_TYPES.CLOCK, ITEM_TYPES.RANDOM, ITEM_TYPES.SHEID, ITEM_TYPES.SHOE]
+      const itemCount = Math.random() < 0.2 ? getRandomInt(1, 2) : 0 // 20%概率 1~2个
+      const usedItemTileIndex = new Set([...usedTileIndex])
+      let tryCount = 0
+      while (items.length < itemCount && tryCount < 10) {
+        const tileIndex = getRandomInt(minTileIndex, maxTileIndex)
+        if (!usedItemTileIndex.has(tileIndex)) {
+          usedItemTileIndex.add(tileIndex)
+          items.push({
+            tileIndex,
+            type: getRandomFromArray(itemTypes),
+          })
+        }
+        tryCount++
+      }
       rows.push({
         type: 'forest',
         trees,
+        items,
       })
     }
     else {
@@ -66,11 +85,29 @@ export default function generateMetaRows(startRowIndex, N = 20) {
           type: `car0${getRandomInt(1, 8)}`,
         })
       }
+      // 生成道具 items
+      const items = []
+      const itemTypes = [ITEM_TYPES.CLOCK, ITEM_TYPES.RANDOM, ITEM_TYPES.SHEID, ITEM_TYPES.SHOE]
+      const itemCount = Math.random() < 0.2 ? getRandomInt(1, 2) : 0 // 20%概率 1~2个
+      const usedItemTileIndex = new Set([...usedTileIndex])
+      let tryCount = 0
+      while (items.length < itemCount && tryCount < 10) {
+        const tileIndex = getRandomInt(minTileIndex, maxTileIndex)
+        if (!usedItemTileIndex.has(tileIndex)) {
+          usedItemTileIndex.add(tileIndex)
+          items.push({
+            tileIndex,
+            type: getRandomFromArray(itemTypes),
+          })
+        }
+        tryCount++
+      }
       rows.push({
         type: 'road',
         direction: Math.random() < 0.5,
         speed: 1,
         vehicles,
+        items,
       })
     }
   }

@@ -33,40 +33,6 @@ const metaData = [
       { tileIndex: 6, type: 'tree04' },
     ],
   },
-  {
-    type: 'road',
-    direction: false, // false 向左，true 向右
-    speed: 1,
-    vehicles: [
-      { initialTileIndex: 2, type: 'car01' },
-      { initialTileIndex: -3, type: 'car02' },
-    ],
-  },
-  {
-    type: 'road',
-    direction: true, // false 向左，true 向右
-    speed: 1,
-    vehicles: [
-      { initialTileIndex: 4, type: 'car01' },
-      { initialTileIndex: -1, type: 'car02' },
-    ],
-  },
-  {
-    type: 'forest',
-    trees: [
-      { tileIndex: -3, type: 'tree02' },
-      { tileIndex: 6, type: 'tree04' },
-    ],
-  },
-  {
-    type: 'road',
-    direction: true, // false 向左，true 向右
-    speed: 1,
-    vehicles: [
-      { initialTileIndex: 4, type: 'car01' },
-      { initialTileIndex: -1, type: 'car02' },
-    ],
-  },
 ]
 
 export default metaData

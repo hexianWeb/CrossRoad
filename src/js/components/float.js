@@ -12,6 +12,7 @@ export default class Float {
     this.rotationIntensity = config.rotationIntensity || 1
     this.floatIntensity = config.floatIntensity || 1
     this.floatingRange = config.floatingRange || [-0.1, 0.1]
+    this.rotationSpeed = config.rotationSpeed ?? 0.01
 
     this.group = new THREE.Group()
     this.offset = Math.random() * 114_514
@@ -42,5 +43,7 @@ export default class Float {
       this.floatingRange[1] ?? 0.1,
     )
     this.group.position.y = yPosition * this.floatIntensity
+
+    this.group.rotation.y += this.rotationSpeed
   }
 }

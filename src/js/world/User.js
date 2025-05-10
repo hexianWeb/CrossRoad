@@ -100,6 +100,9 @@ export default class User {
   // 监听键盘事件，使用 event.code 适配非QWERTY键盘
   listenKeyboard() {
     window.addEventListener('keydown', (event) => {
+      if (this.experience.isPaused) {
+        return
+      }
       let move = null
       switch (event.code) {
         case 'ArrowUp':
@@ -264,6 +267,18 @@ export default class User {
     this.instance.rotation.y = this.endRot
     // 恢复正常缩放
     this.instance.scale.set(this.scale, this.scale, this.scale)
+
+    // ===== 分数统计与事件触发 =====
+    // 记录最大前进距离
+    if (this.maxZ === undefined) {
+      this.maxZ = 0
+    }
+    if (this.currentTile.z > this.maxZ) {
+      this.maxZ = this.currentTile.z
+
+      // 触发分数事件
+      this.experience.trigger('scoreUpdate', [this.maxZ])
+    }
   }
 
   // yoyo 动画：尝试移动但弹回原位（agentGroup 只做 x/z，instance 只做 y）
@@ -339,10 +354,17 @@ export default class User {
     this.agentGroup.position.set(0, 0, 0)
 
     // 重置角色位置和缩放
-    this.instance.position.set(0, 0.22, 0)
+    this.instance.position.set(0, 1, 0) // 设置初始高度为1
+    gsap.to(this.instance.position, {
+      y: 0.22,
+      duration: 0.5,
+      ease: 'bounce.out',
+    })
     this.instance.scale.set(this.scale, this.scale, this.scale)
 
     // 重置角色朝向
     this.instance.rotation.y = 0
+
+    this.experience.trigger('scoreUpdate', [0])
   }
 }

@@ -4,6 +4,7 @@ import Camera from './camera.js'
 import Renderer from './renderer.js'
 import sources from './sources.js'
 import Debug from './utils/debug.js'
+import EventEmitter from './utils/event-emitter.js'
 import IMouse from './utils/imouse.js'
 import Resources from './utils/resources.js'
 import Sizes from './utils/sizes.js'
@@ -14,13 +15,14 @@ import World from './world/world.js'
 
 let instance
 
-export default class Experience {
+export default class Experience extends EventEmitter {
   constructor(canvas) {
     // Singleton
     if (instance) {
       return instance
     }
 
+    super()
     instance = this
 
     // Global access
@@ -48,6 +50,16 @@ export default class Experience {
     this.time.on('tick', () => {
       this.update()
     })
+
+    // 事件监听测试
+    this.on('pause', () => {
+      this.isPaused = true // 设置为暂停
+      console.warn('[Experience] 收到 pause 事件，暂停游戏')
+    })
+    this.on('resume', () => {
+      this.isPaused = false
+      console.warn('[Experience] 收到 resume 事件，恢复游戏')
+    })
   }
 
   resize() {
@@ -56,6 +68,8 @@ export default class Experience {
   }
 
   update() {
+    if (this.isPaused)
+      return
     this.camera.update()
     this.world.update()
     this.renderer.update() // 切换为手动更新

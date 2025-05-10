@@ -2,6 +2,7 @@ import * as THREE from 'three'
 
 import Experience from '../experience.js'
 import Environment from './environment.js'
+import ItemManager, { ITEM_TYPES } from './ItemManager.js'
 import Map from './Map.js'
 import User from './User.js'
 
@@ -18,9 +19,34 @@ export default class World {
       this.environment = new Environment()
       this.map = new Map()
       this.user = new User()
+      this.itemManager = new ItemManager()
       // 相机只跟随 user 的 agentGroup 水平移动
       this.user.agentGroup.add(this.camera.instance)
       this.user.agentGroup.add(this.environment.sunLight)
+
+      this.experience.on('restart', () => {
+        this.onGameOver()
+      })
+
+      // 监听道具拾取事件
+      this.experience.on('itemCollected', (type) => {
+        // 简单分数加成和提示
+        let addScore = 0
+        if (type === ITEM_TYPES.RED)
+          addScore = 5
+        if (type === ITEM_TYPES.GREEN)
+          addScore = 10
+        if (type === ITEM_TYPES.BLUE)
+          addScore = 20
+        if (addScore > 0) {
+          // 触发分数事件
+          this.experience.trigger('scoreUpdate', [this.user.maxZ + addScore])
+          console.warn(`[道具] 拾取${type}道具，分数+${addScore}`)
+        }
+        else {
+          console.warn(`[道具] 拾取${type}道具`)
+        }
+      })
     })
   }
 
@@ -45,6 +71,10 @@ export default class World {
               }
             }
           }
+        }
+        // === 检查道具拾取 ===
+        if (this.itemManager) {
+          this.itemManager.checkUserTile(this.user.currentTile)
         }
       }
     }

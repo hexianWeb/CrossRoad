@@ -3,6 +3,7 @@ import { GENERATION_COUNT } from '../constants.js'
 import Experience from '../experience.js'
 import Car from './Car.js'
 import Grass from './Grass.js'
+import ItemManager from './ItemManager.js'
 import metaData from './metaData.js'
 import Road from './Road.js'
 import generateMetaRows from './tool.js'
@@ -17,8 +18,8 @@ export default class Map {
     this.debug = this.experience.debug
     this.rowIndex = 0
 
-    // 地图元数据（可扩展）
-    this.metadata = metaData
+    // 地图元数据（可扩展 深拷贝）
+    this.metadata = JSON.parse(JSON.stringify(metaData))
     // 存储所有地图tile的3D对象
     this.tiles = []
     // 存储草地对象
@@ -31,6 +32,8 @@ export default class Map {
     this.carRows = []
     // 新增：行号到车辆mesh数组的映射
     this.carMeshDict = {}
+    // 新增：道具管理器
+    this.itemManager = new ItemManager()
 
     // 初始化地图
     this.initializeMap()
@@ -63,6 +66,10 @@ export default class Map {
       if (rowData && rowData.type === 'road') {
         this.addRoadRow(this.rowIndex)
         this.addCarRow(rowData.vehicles, this.rowIndex, rowData.direction, rowData.speed)
+      }
+      // 新增：生成道具
+      if (rowData.items && rowData.items.length > 0) {
+        this.itemManager.addItems(rowData.items, this.rowIndex)
       }
     })
   }
@@ -111,6 +118,10 @@ export default class Map {
         this.addRoadRow(this.rowIndex)
         this.addCarRow(rowData.vehicles, this.rowIndex, rowData.direction, rowData.speed)
       }
+      // 新增：生成道具
+      if (rowData.items && rowData.items.length > 0) {
+        this.itemManager.addItems(rowData.items, this.rowIndex)
+      }
     })
   }
 
@@ -150,6 +161,9 @@ export default class Map {
     this.carRows.forEach((carRow) => {
       carRow.update()
     })
+    if (this.itemManager) {
+      this.itemManager.update()
+    }
   }
 
   // Debug 面板
