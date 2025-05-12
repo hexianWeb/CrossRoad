@@ -1,9 +1,9 @@
 import gsap from 'gsap' // 引入 gsap 用于动画
 import * as THREE from 'three'
+import { NORMAL_STEP_TIME, SPEEDUP_STEP_TIME } from '../constants.js'
 // User.js
 // 负责主角小鸡的加载与管理
 import Experience from '../experience.js'
-import metaData from './metaData.js'
 import { endsUpInValidPosition, getSwipeDirection, getTargetRotation, isMobile } from './tool.js'
 
 export default class User {
@@ -51,6 +51,11 @@ export default class User {
     if (isMobile()) {
       this.listenTouch()
     }
+
+    this.isInvincible = false // 是否无敌
+    this._invincibleTimeout = null // 无敌定时器
+    this.isSpeedUp = false // 是否加速
+    this._speedUpTimeout = null // 加速定时器
   }
 
   // 加载并放置小鸡模型
@@ -183,7 +188,8 @@ export default class User {
       this.setRotation(1) // 直接转到目标朝向
 
       // 检查是否合法
-      if (!endsUpInValidPosition(nextTarget, metaData)) {
+      const mapMetadata = this.experience.world.map.metadata
+      if (!endsUpInValidPosition(nextTarget, mapMetadata)) {
         // 不合法，执行 yoyo 动画并丢弃本次指令
         this.playYoyoAnimation(nextTarget)
         this.movesQueue.shift()
@@ -206,7 +212,7 @@ export default class User {
     }
 
     // 步进动画
-    const stepTime = 0.2 // 单步时长（秒）
+    const stepTime = this.isSpeedUp ? SPEEDUP_STEP_TIME : NORMAL_STEP_TIME // 根据加速状态调整步进时长
     const progress = Math.min(1, this.moveClock.getElapsedTime() / stepTime)
     this.setPosition(progress)
     this.setRotation(progress)
@@ -366,5 +372,53 @@ export default class User {
     this.instance.rotation.y = 0
 
     this.experience.trigger('scoreUpdate', [0])
+  }
+
+  /**
+   * 设置无敌状态
+   * @param {boolean} flag 是否无敌
+   * @param {number} duration 持续时间（毫秒）
+   */
+  setInvincible(flag, duration = 3000) {
+    if (flag) {
+      this.isInvincible = true
+      if (this._invincibleTimeout)
+        clearTimeout(this._invincibleTimeout)
+      this._invincibleTimeout = setTimeout(() => {
+        this.isInvincible = false
+        this._invincibleTimeout = null
+      }, duration)
+    }
+    else {
+      this.isInvincible = false
+      if (this._invincibleTimeout) {
+        clearTimeout(this._invincibleTimeout)
+        this._invincibleTimeout = null
+      }
+    }
+  }
+
+  /**
+   * 设置加速状态
+   * @param {boolean} flag 是否加速
+   * @param {number} duration 持续时间（毫秒）
+   */
+  setSpeedUp(flag, duration = 5000) {
+    if (flag) {
+      this.isSpeedUp = true
+      if (this._speedUpTimeout)
+        clearTimeout(this._speedUpTimeout)
+      this._speedUpTimeout = setTimeout(() => {
+        this.isSpeedUp = false
+        this._speedUpTimeout = null
+      }, duration)
+    }
+    else {
+      this.isSpeedUp = false
+      if (this._speedUpTimeout) {
+        clearTimeout(this._speedUpTimeout)
+        this._speedUpTimeout = null
+      }
+    }
   }
 }

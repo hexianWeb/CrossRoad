@@ -18,7 +18,7 @@ export default class Map {
     this.debug = this.experience.debug
     this.rowIndex = 0
 
-    // 地图元数据（可扩展 深拷贝）
+    // 地图元数据（深拷贝，避免全局污染）
     this.metadata = JSON.parse(JSON.stringify(metaData))
     // 存储所有地图tile的3D对象
     this.tiles = []
@@ -153,6 +153,15 @@ export default class Map {
     // 移除所有车辆对象
     this.carRows.forEach(carRow => carRow.remove())
     this.carRows = []
+
+    // 重置 carMeshDict
+    this.carMeshDict = {}
+    // 清空 itemManager
+    if (this.itemManager) {
+      this.itemManager.clear()
+    }
+    // 重新深拷贝元数据
+    this.metadata = JSON.parse(JSON.stringify(metaData))
     // 重新初始化
     this.initializeMap()
   }

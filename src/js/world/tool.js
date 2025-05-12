@@ -139,7 +139,7 @@ export function getTargetRotation(dir) {
  */
 export function endsUpInValidPosition(targetTile, metaData) {
   // 1. 边界检查
-  if (targetTile.x < -8 || targetTile.x > 8)
+  if (targetTile.x < minTileIndex || targetTile.x > maxTileIndex)
     return false
   if (targetTile.z <= -5)
     return false

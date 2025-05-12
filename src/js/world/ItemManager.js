@@ -33,18 +33,13 @@ export default class ItemManager {
         mesh = gltf.scene ? gltf.scene.clone(true) : gltf.clone(true)
         mesh.scale.set(0.3, 0.3, 0.3)
         mesh.position.set(0, 0.5, 0) // 交由 Float 控制位置
-        mesh.traverse((obj) => {
-          if (obj.isMesh) {
-            obj.castShadow = true
-            obj.userData = { type, tile: { x: tileIndex, z: rowIndex } }
-          }
-        })
         // 用 Float 包裹
         const float = new Float({ floatIntensity: 1, rotationIntensity: 1, rotationSpeed: 0.02 })
         float.group.position.set(tileIndex, 0, rowIndex)
         float.add(mesh)
+        float.group.userData = { type, tile: { x: tileIndex, z: rowIndex } }
         this.floats.push(float)
-        this.items.push(float)
+        this.items.push(float.group)
       }
     })
   }
@@ -52,15 +47,23 @@ export default class ItemManager {
   // 检查主角是否到达道具 tile
   checkUserTile(userTile) {
     for (let i = 0; i < this.items.length; i++) {
-      const mesh = this.items[i]
+      const mesh = this.items[i] // 现在 mesh 就是 float.group
       const { x, z } = mesh.userData.tile
       if (userTile.x === x && userTile.z === z) {
-        // 触发道具事件
-        this.experience.trigger('itemCollected', [mesh.userData.type])
+        let itemType = mesh.userData.type
+        // 如果是随机箱，则随机分配一种道具（排除 random 本身）
+        if (itemType === ITEM_TYPES.RANDOM) {
+          // 获取所有可用道具类型，排除 random
+          const availableTypes = Object.values(ITEM_TYPES).filter(type => type !== ITEM_TYPES.RANDOM)
+          // 随机选一个
+          itemType = availableTypes[Math.floor(Math.random() * availableTypes.length)]
+        }
+        // 触发道具事件，传递实际分配的类型
+        this.experience.trigger('itemCollected', [itemType])
         // 移除道具
         this.scene.remove(mesh)
         this.items.splice(i, 1)
-        return mesh.userData.type
+        return itemType
       }
     }
     return null
@@ -70,5 +73,14 @@ export default class ItemManager {
     this.floats.forEach((float) => {
       float.update()
     })
+  }
+
+  clear() {
+    // 移除所有 Float group（道具 mesh）
+    this.floats.forEach((float) => {
+      this.scene.remove(float.group)
+    })
+    this.items = []
+    this.floats = []
   }
 }

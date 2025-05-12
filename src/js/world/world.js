@@ -1,8 +1,10 @@
 import * as THREE from 'three'
 
+import { CLOCK_EFFECT_DURATION_MS, SHEID_EFFECT_DURATION_MS, SHOE_EFFECT_DURATION_MS } from '../constants.js'
 import Experience from '../experience.js'
+import { showItemEffectMask } from '../utils/itemEffectMask.js'
 import Environment from './environment.js'
-import ItemManager, { ITEM_TYPES } from './ItemManager.js'
+import { ITEM_TYPES } from './ItemManager.js'
 import Map from './Map.js'
 import User from './User.js'
 
@@ -19,7 +21,7 @@ export default class World {
       this.environment = new Environment()
       this.map = new Map()
       this.user = new User()
-      this.itemManager = new ItemManager()
+      this.itemManager = this.map.itemManager
       // 相机只跟随 user 的 agentGroup 水平移动
       this.user.agentGroup.add(this.camera.instance)
       this.user.agentGroup.add(this.environment.sunLight)
@@ -32,19 +34,57 @@ export default class World {
       this.experience.on('itemCollected', (type) => {
         // 简单分数加成和提示
         let addScore = 0
-        if (type === ITEM_TYPES.RED)
-          addScore = 5
-        if (type === ITEM_TYPES.GREEN)
-          addScore = 10
-        if (type === ITEM_TYPES.BLUE)
-          addScore = 20
+        switch (type) {
+          case ITEM_TYPES.RANDOM:
+            addScore = 1
+            break
+          case ITEM_TYPES.SHOE:
+            addScore = 2
+            break
+          case ITEM_TYPES.CLOCK:
+            addScore = 3
+            break
+          case ITEM_TYPES.SHEID:
+            addScore = 4
+            break
+        }
+
         if (addScore > 0) {
-          // 触发分数事件
-          this.experience.trigger('scoreUpdate', [this.user.maxZ + addScore])
+          // 只触发 itemScore 事件
+          this.experience.trigger('itemScore', [addScore])
           console.warn(`[道具] 拾取${type}道具，分数+${addScore}`)
         }
         else {
           console.warn(`[道具] 拾取${type}道具`)
+        }
+
+        // === 新增：道具遮罩效果 ===
+        let duration = 0
+        switch (type) {
+          case ITEM_TYPES.SHOE:
+            duration = SHOE_EFFECT_DURATION_MS
+            break
+          case ITEM_TYPES.CLOCK:
+            duration = CLOCK_EFFECT_DURATION_MS
+            break
+          case ITEM_TYPES.SHEID:
+            duration = SHEID_EFFECT_DURATION_MS
+            break
+          default:
+            duration = 3000 // 默认3秒
+        }
+        showItemEffectMask(type, duration)
+
+        if (type === ITEM_TYPES.SHEID && this.user) {
+          // 3秒无敌
+          this.user.setInvincible(true, SHEID_EFFECT_DURATION_MS)
+          // 可选：提示无敌状态
+          console.warn('[道具] 获得无敌盾，小鸡无敌3秒')
+        }
+
+        if (type === ITEM_TYPES.SHOE && this.user) {
+          this.user.setSpeedUp(true, SHOE_EFFECT_DURATION_MS)
+          console.warn('[道具] 获得加速鞋，小鸡加速5秒')
         }
       })
     })
@@ -67,7 +107,13 @@ export default class World {
             for (const carMesh of carMeshes) {
               const carBox = new THREE.Box3().setFromObject(carMesh)
               if (playerBox.intersectsBox(carBox)) {
-                this.onGameOver()
+                if (!this.user.isInvincible) {
+                  this.onGameOver()
+                }
+                else {
+                  // 可选：无敌时碰撞提示
+                  // console.log('无敌中，碰撞无效')
+                }
               }
             }
           }

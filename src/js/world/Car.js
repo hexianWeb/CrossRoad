@@ -1,4 +1,4 @@
-import { CAR_BOUNDARY_MAX, CAR_BOUNDARY_MIN } from '../constants.js'
+import { CAR_BOUNDARY_MAX, CAR_BOUNDARY_MIN, CLOCK_EFFECT_DURATION_MS, TIME_MULTIPLIER } from '../constants.js'
 import Experience from '../experience'
 
 export default class Car {
@@ -19,6 +19,7 @@ export default class Car {
     this.rowIndex = rowIndex
     this.direction = direction
     this.speed = speed
+    this.timeMultiplier = 1
     this.carMeshes = []
     // 记录每辆车的初始y坐标和抖动相位
     this.carShakeParams = []
@@ -28,6 +29,8 @@ export default class Car {
     this.isActive = true
     // 绑定事件监听，检测页面可见性变化
     document.addEventListener('visibilitychange', this.handleVisibilityChange.bind(this))
+
+    this.experience.on('itemCollected', this.applyClockEffect.bind(this))
   }
 
   // 处理页面可见性变化
@@ -96,11 +99,11 @@ export default class Car {
     if (!this.isActive)
       return
     // 获取全局已用时间，单位ms，转为秒
-    const t = this.time.elapsed * 0.03
+    const t = this.time.elapsed * 0.03 * this.timeMultiplier
     this.carMeshes.forEach((car, idx) => {
       // 车辆移动方向
       const dir = this.direction ? 1 : -1
-      car.position.x += dir * this.speed * this.time.delta * 1 / 60 * 0.23
+      car.position.x += dir * this.speed * this.time.delta * 1 / 60 * 0.23 * this.timeMultiplier
 
       // 边界判断与循环
       if (dir === 1 && car.position.x > CAR_BOUNDARY_MAX) {
@@ -121,5 +124,20 @@ export default class Car {
       const offsetY = Math.sin(t * freq1 + shake.phase) * amp1 + Math.cos(t * freq2 + shake.phase * 1.3) * amp2
       car.position.y = shake.baseY + offsetY
     })
+  }
+
+  applyClockEffect(itemType) {
+    if (itemType !== 'clock')
+      return
+    // 先清除已有定时器，避免叠加
+    if (this.clockTimeout) {
+      clearTimeout(this.clockTimeout)
+    }
+    this.timeMultiplier = TIME_MULTIPLIER
+    // CLOCK_EFFECT_DURATION_MS毫秒后恢复
+    this.clockTimeout = setTimeout(() => {
+      this.timeMultiplier = 1
+      this.clockTimeout = null
+    }, CLOCK_EFFECT_DURATION_MS)
   }
 }
