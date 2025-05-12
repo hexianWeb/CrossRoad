@@ -5,7 +5,8 @@ import GameControlPanel from './vue/GameControlPanel.vue'
 import ScorePanel from './vue/ScorePanel.vue'
 
 const threeCanvas = ref(null)
-const score = ref(0)
+const maxZScore = ref(0)
+const itemScoreSum = ref(0)
 const highScore = ref(Number(localStorage.getItem('highScore') || 0))
 
 onMounted(() => {
@@ -14,11 +15,24 @@ onMounted(() => {
   // 监听分数事件
   const exp = new Experience()
   exp.on('scoreUpdate', (newScore) => {
-    score.value = newScore
-    if (newScore > highScore.value) {
-      highScore.value = newScore
-      localStorage.setItem('highScore', newScore)
+    maxZScore.value = newScore
+    const totalScore = maxZScore.value + itemScoreSum.value
+    if (totalScore > highScore.value) {
+      highScore.value = totalScore
+      localStorage.setItem('highScore', totalScore)
     }
+  })
+  exp.on('itemScore', (addScore) => {
+    itemScoreSum.value += addScore
+    const totalScore = maxZScore.value + itemScoreSum.value
+    if (totalScore > highScore.value) {
+      highScore.value = totalScore
+      localStorage.setItem('highScore', totalScore)
+    }
+  })
+  exp.on('restart', () => {
+    itemScoreSum.value = 0
+    maxZScore.value = 0
   })
 })
 </script>
@@ -30,7 +44,7 @@ onMounted(() => {
     <!-- 游戏控制面板 -->
     <GameControlPanel />
     <!-- 分数面板 -->
-    <ScorePanel :score="score" :high-score="highScore" />
+    <ScorePanel :score="maxZScore + itemScoreSum" :high-score="highScore" />
   </div>
 </template>
 

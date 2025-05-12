@@ -47,3 +47,12 @@ body {
     animation: octocat-wave 560ms ease-in-out;
   }
 }
+
+@keyframes flash {
+  0%, 100% { opacity: 1; }
+  20%, 60% { opacity: 0.2; }
+  40%, 80% { opacity: 1; }
+}
+.flash {
+  animation: flash 0.8s linear infinite;
+}
