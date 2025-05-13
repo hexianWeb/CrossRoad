@@ -69,7 +69,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="absolute left-1/2 bottom-12 -translate-x-1/2 flex flex-col items-center z-[2000] pointer-events-none select-none">
+  <div class="absolute left-1/2 bottom-12 -translate-x-1/2 flex flex-col items-center z-[999] pointer-events-none select-none">
     <div class="flex flex-row justify-center mb-1">
       <!-- 上方向键 -->
       <img
