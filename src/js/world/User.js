@@ -356,6 +356,9 @@ export default class User {
       z: 0,
     }
 
+    // 重置最大前进距离
+    this.maxZ = 0
+
     // 重置 agentGroup 位置
     this.agentGroup.position.set(0, 0, 0)
 

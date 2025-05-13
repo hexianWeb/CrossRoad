@@ -1,6 +1,7 @@
+import { createClient } from '@supabase/supabase-js'
 import * as THREE from 'three'
 
-import { CLOCK_EFFECT_DURATION_MS, SHEID_EFFECT_DURATION_MS, SHOE_EFFECT_DURATION_MS } from '../constants.js'
+import { CLOCK_EFFECT_DURATION_MS, SHEID_EFFECT_DURATION_MS, SHOE_EFFECT_DURATION_MS, SUPABASE_KEY, SUPABASE_TABLE, SUPABASE_URL } from '../constants.js'
 import Experience from '../experience.js'
 import { showItemEffectMask } from '../utils/itemEffectMask.js'
 import Environment from './environment.js'
@@ -132,11 +133,18 @@ export default class World {
   }
 
   // 游戏结束处理方法
-  onGameOver() {
-    // 这里可以自定义游戏结束逻辑，比如弹窗、重置、跳转等
-    // 目前简单用alert
+  async onGameOver() {
     this.map.resetMap()
-    // TODO: 可扩展为更优雅的UI提示或重置逻辑
     this.user.reset()
+    // ===== 新增：直接用 Supabase JS SDK 上传分数到排行榜 =====
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
+    const username = localStorage.getItem('username') || '匿名'
+    const score = this.user.maxZ || 0
+    try {
+      await supabase.from(SUPABASE_TABLE).insert([{ username, score }])
+    }
+    catch (e) {
+      console.warn('分数上传失败', e)
+    }
   }
 }

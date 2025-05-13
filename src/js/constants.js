@@ -20,5 +20,10 @@ export const TIME_MULTIPLIER = 0.1
 export const SHEID_EFFECT_DURATION_MS = 10000 // 无敌盾道具效果持续时间（毫秒）
 
 export const SHOE_EFFECT_DURATION_MS = 10000 // 加速鞋道具效果持续时间（毫秒）
-export const SPEEDUP_STEP_TIME = 0.05 // 加速状态下单步时长（秒）
+export const SPEEDUP_STEP_TIME = 0.11 // 加速状态下单步时长（秒）
 export const NORMAL_STEP_TIME = 0.2 // 正常单步时长（秒）
+
+// Supabase 配置，敏感信息请放在 .env 文件中，并通过 Vite 环境变量读取
+export const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
+export const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_KEY
+export const SUPABASE_TABLE = import.meta.env.VITE_SUPABASE_TABLE || 'leaderboard'

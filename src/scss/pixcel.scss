@@ -1,0 +1,105 @@
+// 定义默认颜色变量
+$pixel-text-color-default: white;
+$pixel-background-color-default: rgba(0, 0, 0, 0.5); // 默认半透明黑色背景
+
+// 定义 pixel-box mixin
+@mixin pixel-box($text-color: $pixel-text-color-default, $bg-color: $pixel-background-color-default) {
+  // 基础样式 - 基于原 CSS 中第二个 .pixel2 规则集
+  width: 100%; // 宽度通常由父元素或内容决定，移除默认100%
+  height: 100%; // 高度通常由父元素或内容决定，移除默认100%
+  position: relative;
+  display: inline-block; // 改回 inline-block 可能更通用，如果需要 block 可覆盖
+  margin: 0;
+  font-family: 'VT323', monospace; // 添加 monospace 作为后备
+  text-transform: none;
+  font-size: 25px;
+  padding: 10px 10px;
+  width: auto; // 让宽度自适应内容
+  z-index: 2;
+  line-height: 1.5;
+  text-align: left; // 默认左对齐
+  cursor: default; // 默认光标
+
+  // 可选文本
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+
+  // 应用颜色参数
+  color: $text-color;
+  background-color: $bg-color; // 使用 background-color
+
+  // 伪元素样式
+  &::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 10px;
+    bottom: 10px;
+    left: -10px;
+    right: -10px;
+    background-color: $bg-color; // 使用 background-color
+    z-index: -1;
+  }
+
+  &::after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 4px;
+    bottom: 4px;
+    left: -6px;
+    right: -6px;
+    background-color: $bg-color; // 使用 background-color
+    z-index: -1;
+  }
+
+  // active 状态 - 保持原始的 active 效果
+  &:active {
+    top: 2px; // 注意: 这需要 position: relative 或 absolute 才能生效
+  }
+}
+
+// 应用 mixin 创建不同的类
+.pixel {
+  @include pixel-box(); // 使用默认颜色
+  position: relative; // 确保父容器是定位上下文
+
+  .continue-arrow {
+    position: absolute;
+    bottom: 15px; // 调整位置，考虑内边距
+    right: 20px;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent; // 三角形左边透明
+    border-right: 10px solid transparent; // 三角形右边透明
+    border-top: 15px solid #c27c38; // 三角形顶部为黄色，形成向下箭头
+    cursor: pointer; // 设置鼠标指针为手型，表示可点击
+    animation: bounce 1.5s infinite; // 应用跳动动画
+  }
+}
+
+// 定义跳动动画
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-8px); // 向上移动
+  }
+  60% {
+    transform: translateY(-4px); // 向上移动幅度减小
+  }
+}
+
+.pixel-yellow {
+  // 黄色，不透明
+  @include pixel-box($text-color: black, $bg-color: #c27c38); // 黄底黑字可能更清晰
+  font-size: 20px;
+}
+
+.pixel-blue {
+  // 蓝色，不透明
+  @include pixel-box($text-color: white, $bg-color: #2f66a2); // 蓝底白字
+} 
