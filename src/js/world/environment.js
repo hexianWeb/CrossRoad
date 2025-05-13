@@ -16,6 +16,7 @@ export default class Environment {
 
     // Setup
     this.setSunLight()
+    this.setAmbientLight()
     this.setEnvironmentMap()
     this.debuggerInit()
   }
@@ -48,6 +49,11 @@ export default class Environment {
     this.helper = new THREE.CameraHelper(this.sunLight.shadow.camera)
     this.helper.visible = false
     this.scene.add(this.helper)
+  }
+
+  setAmbientLight() {
+    this.ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.5)
+    this.scene.add(this.ambientLight)
   }
 
   setEnvironmentMap() {

@@ -113,6 +113,37 @@ watch(isMusicAllowed, (val) => {
     pauseMusic()
   }
 })
+
+// ===== 语言/i18n 相关 =====
+const lang = ref('zh')
+const langs = {
+  zh: {
+    musicTitle: '是否允许播放背景音乐？',
+    musicDesc: '为提升游戏体验，建议开启音乐。您可随时在右上角按钮切换。',
+    dontAsk: '下次不再询问',
+    allow: '允许',
+    deny: '拒绝',
+    musicOn: '音乐开',
+    musicOff: '音乐关',
+    musicSwitch: '音乐开关',
+    langBtn: 'EN',
+  },
+  en: {
+    musicTitle: 'Allow background music?',
+    musicDesc: 'For a better experience, we recommend enabling music. You can always toggle it in the top right corner.',
+    dontAsk: 'Don\'t ask again',
+    allow: 'Allow',
+    deny: 'Deny',
+    musicOn: 'Music On',
+    musicOff: 'Music Off',
+    musicSwitch: 'Music',
+    langBtn: '中',
+  },
+}
+const t = () => langs[lang.value]
+function toggleLang() {
+  lang.value = lang.value === 'zh' ? 'en' : 'zh'
+}
 </script>
 
 <template>
@@ -122,10 +153,10 @@ watch(isMusicAllowed, (val) => {
       class="w-12 h-12 flex items-center justify-center rounded   mr-2"
       @click="toggleMusic"
       :disabled="!isMusicAllowed"
-      title="音乐开关"
+      :title="t().musicSwitch"
     >
-      <img v-if="isMusicPlaying" src="/image/audioOn.png" alt="音乐开" class="w-10 h-10" />
-      <img v-else src="/image/audioOff.png" alt="音乐关" class="w-10 h-10" />
+      <img v-if="isMusicPlaying" src="/image/audioOn.png" :alt="t().musicOn" class="w-10 h-10" />
+      <img v-else src="/image/audioOff.png" :alt="t().musicOff" class="w-10 h-10" />
     </button>
     <!-- 排行榜按钮 -->
     <button
@@ -178,20 +209,25 @@ watch(isMusicAllowed, (val) => {
     <div v-if="showMusicDialog" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-[2000]">
       <div class="rounded-lg p-6 shadow-lg flex flex-col items-center">
         <div class="pixel">
-          <div class="mb-4 text-2xl font-bold">是否允许播放背景音乐？</div>
-          <div class="mb-4 text-white/75">为提升游戏体验，建议开启音乐。您可随时在右上角按钮切换。</div>
+          <div class="mb-4 text-2xl font-bold">{{ t().musicTitle }}</div>
+          <div class="mb-4 text-white/75">{{ t().musicDesc }}</div>
           <label class="flex items-center mb-6 select-none">
-          <input type="checkbox" v-model="dontAskNextTime" class="mr-2" />
-          <span class="text-lg text-gray-500">下次不再询问</span>
-        </label>
-        <div class="flex gap-4 justify-center text-lg">
-          <button class="px-4 py-2 bg-green-500 text-white rounded" @click="allowMusic">允许</button>
-          <button class="px-4 py-2 bg-gray-300 text-gray-700 rounded" @click="denyMusic">拒绝</button>
+            <input type="checkbox" v-model="dontAskNextTime" class="mr-2" />
+            <span class="text-lg text-gray-500">{{ t().dontAsk }}</span>
+          </label>
+          <div class="flex gap-4 justify-center text-lg">
+            <button class="px-4 py-2 bg-green-500 text-white rounded" @click="allowMusic">{{ t().allow }}</button>
+            <button class="px-4 py-2 bg-gray-300 text-gray-700 rounded" @click="denyMusic">{{ t().deny }}</button>
+          </div>
+            <!-- 右上角绝对定位的语言切换按钮 -->
+          <button class="absolute top-2 right-2 z-[2001] text-base sm:text-xl font-bold bg-yellow-300 text-black rounded px-2 py-1 shadow hover:brightness-110 transition-all" @click="toggleLang" title="切换语言">
+            {{ t().langBtn }}
+          </button>
         </div>
-      </div>
       </div>
     </div>
   </div>
+
 </template>
 
 <style scoped>
