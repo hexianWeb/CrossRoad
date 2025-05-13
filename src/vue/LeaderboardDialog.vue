@@ -31,29 +31,42 @@ onMounted(fetchLeaderboard)
 
 <template>
   <div class="fixed inset-0 flex items-center justify-center z-[4000] bg-black/60">
-    <div class="bg-white/95 rounded-lg p-6 w-80 relative">
-      <div class="text-3xl font-bold text-center mb-4 text-yellow-600">
+    <!-- 移动端适配：宽度自适应，最大宽度限制，内边距缩小 -->
+    <div class="bg-white/95 rounded-lg p-4 sm:p-6 w-full max-w-xs sm:w-80 relative max-h-[80vh] overflow-auto">
+      <div class="text-2xl sm:text-3xl font-bold text-center mb-4 text-yellow-600">
         {{ t().title }}
       </div>
-      <button class="absolute top-2 right-3 text-lg" @click="$emit('close')">
+      <button class="absolute top-2 right-3 text-base sm:text-lg" @click="$emit('close')">
         ✖
       </button>
       <div v-if="loading" class="text-center text-gray-500">
         Loading...
       </div>
-      <table v-else class="w-full text-center text-2xl">
+      <table v-else class="w-full text-center text-base sm:text-2xl">
         <thead>
           <tr>
-            <th>#</th>
-            <th>{{ t().name }}</th>
-            <th>{{ t().score }}</th>
+            <th class="py-1">
+              #
+            </th>
+            <th class="py-1">
+              {{ t().name }}
+            </th>
+            <th class="py-1">
+              {{ t().score }}
+            </th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(item, i) in leaderboard" :key="item.id">
-            <td>{{ i + 1 }}</td>
-            <td>{{ item.username }}</td>
-            <td>{{ item.score }}</td>
+            <td class="py-1">
+              {{ i + 1 }}
+            </td>
+            <td class="py-1 truncate max-w-[6rem]">
+              {{ item.username }}
+            </td>
+            <td class="py-1">
+              {{ item.score }}
+            </td>
           </tr>
         </tbody>
       </table>

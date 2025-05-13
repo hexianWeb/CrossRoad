@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import Experience from './js/experience.js'
+import { isMobile } from './js/world/tool.js'
 import GameControlPanel from './vue/GameControlPanel.vue'
 import KeyIndicator from './vue/KeyIndicator.vue'
 import ScorePanel from './vue/ScorePanel.vue'
@@ -47,7 +48,7 @@ onMounted(() => {
     <!-- 分数面板 -->
     <ScorePanel :score="maxZScore + itemScoreSum" :high-score="highScore" />
     <!-- 按键反馈指示器 -->
-    <KeyIndicator />
+    <KeyIndicator v-if="!isMobile()" />
   </div>
 </template>
 
