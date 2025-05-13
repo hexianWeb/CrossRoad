@@ -1,9 +1,7 @@
 <script setup>
-import { createClient } from '@supabase/supabase-js'
 import { onMounted, ref } from 'vue'
-import { SUPABASE_KEY, SUPABASE_TABLE, SUPABASE_URL } from '../js/constants.js'
-// Supabase 配置
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
+import { SUPABASE_TABLE } from '../js/constants.js'
+import { supabase } from '../js/utils/supabase.js'
 
 const lang = ref(localStorage.getItem('lang') || 'zh')
 const leaderboard = ref([])
@@ -27,7 +25,6 @@ async function fetchLeaderboard() {
   loading.value = false
   if (error)
     console.error(error)
-  else console.log(data)
 }
 onMounted(fetchLeaderboard)
 </script>

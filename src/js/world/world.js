@@ -1,9 +1,9 @@
-import { createClient } from '@supabase/supabase-js'
 import * as THREE from 'three'
 
-import { CLOCK_EFFECT_DURATION_MS, SHEID_EFFECT_DURATION_MS, SHOE_EFFECT_DURATION_MS, SUPABASE_KEY, SUPABASE_TABLE, SUPABASE_URL } from '../constants.js'
+import { CLOCK_EFFECT_DURATION_MS, SHEID_EFFECT_DURATION_MS, SHOE_EFFECT_DURATION_MS, SUPABASE_TABLE } from '../constants.js'
 import Experience from '../experience.js'
 import { showItemEffectMask } from '../utils/itemEffectMask.js'
+import { supabase } from '../utils/supabase.js'
 import Environment from './environment.js'
 import { ITEM_TYPES } from './ItemManager.js'
 import Map from './Map.js'
@@ -28,7 +28,7 @@ export default class World {
       this.user.agentGroup.add(this.environment.sunLight)
 
       this.experience.on('restart', () => {
-        this.onGameOver()
+        this.onRestart()
       })
 
       // 监听道具拾取事件
@@ -134,10 +134,7 @@ export default class World {
 
   // 游戏结束处理方法
   async onGameOver() {
-    this.map.resetMap()
-    this.user.reset()
-    // ===== 新增：直接用 Supabase JS SDK 上传分数到排行榜 =====
-    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
+    this.experience.trigger('restart')
     const username = localStorage.getItem('username') || '匿名'
     const score = this.user.maxZ || 0
     try {
@@ -146,5 +143,10 @@ export default class World {
     catch (e) {
       console.warn('分数上传失败', e)
     }
+  }
+
+  async onRestart() {
+    this.map.resetMap()
+    this.user.reset()
   }
 }
