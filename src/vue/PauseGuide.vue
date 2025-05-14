@@ -1,10 +1,13 @@
 <script setup>
+import { storeToRefs } from 'pinia'
 import { onMounted, ref } from 'vue'
+import { useLangStore } from '../js/store/lang.js'
 
 const emit = defineEmits(['usernameSet', 'continue'])
 
 // 语言支持
-const lang = ref('zh')
+const langStore = useLangStore()
+const { lang } = storeToRefs(langStore)
 const username = ref(localStorage.getItem('username') || '')
 const showNameInput = ref(!username.value)
 const langs = {
@@ -47,7 +50,7 @@ const langs = {
 }
 const t = () => langs[lang.value]
 function toggleLang() {
-  lang.value = lang.value === 'zh' ? 'en' : 'zh'
+  langStore.setLang(lang.value === 'zh' ? 'en' : 'zh')
 }
 function saveName() {
   if (username.value.trim()) {
@@ -110,7 +113,7 @@ onMounted(() => {
           </div>
           <div class="flex flex-col gap-2 sm:gap-3">
             <div v-for="item in t().items" :key="item.img" class="flex items-center space-x-2 sm:space-x-4">
-              <img :src="item.img" class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/10 border border-white/20 flex-shrink-0" :alt="item.label">
+              <img :src="item.img" class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/70 border border-white/20 flex-shrink-0" :alt="item.label">
               <span class="text-white text-base sm:text-xl">{{ item.label }}</span>
             </div>
           </div>

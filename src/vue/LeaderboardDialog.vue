@@ -1,9 +1,12 @@
 <script setup>
+import { storeToRefs } from 'pinia'
 import { onMounted, ref } from 'vue'
 import { SUPABASE_TABLE } from '../js/constants.js'
+import { useLangStore } from '../js/store/lang.js'
 import { supabase } from '../js/utils/supabase.js'
 
-const lang = ref(localStorage.getItem('lang') || 'zh')
+const langStore = useLangStore()
+const { lang } = storeToRefs(langStore)
 const leaderboard = ref([])
 const loading = ref(true)
 
@@ -20,7 +23,7 @@ async function fetchLeaderboard() {
     .from(SUPABASE_TABLE)
     .select('*')
     .order('score', { ascending: false })
-    .limit(10)
+    .limit(100)
   leaderboard.value = data || []
   loading.value = false
   if (error)
