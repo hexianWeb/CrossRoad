@@ -378,29 +378,55 @@ export default class User {
   }
 
   /**
+   * 私有方法：设置主角材质效果
+   * @param {string|null} color 颜色（如 '#ff0000'），为 null 时不改变颜色
+   * @param {number} opacity 透明度
+   */
+  _setMaterialEffect(color, opacity) {
+    const mainMesh = this.instance?.children[0]
+    if (!mainMesh?.material)
+      return
+
+    mainMesh.material.transparent = true
+    mainMesh.material.opacity = opacity
+    if (color) {
+      if (!mainMesh.material._originalColor) {
+        mainMesh.material._originalColor = mainMesh.material.color.clone()
+      }
+      mainMesh.material.color.set(color)
+    }
+  }
+
+  /**
+   * 私有方法：重置主角材质为原始状态
+   */
+  _resetMaterial() {
+    const mainMesh = this.instance?.children[0]
+    if (!mainMesh?.material)
+      return
+
+    if (mainMesh.material._originalColor) {
+      mainMesh.material.color.copy(mainMesh.material._originalColor)
+    }
+    mainMesh.material.opacity = 1
+    mainMesh.material.transparent = false
+  }
+
+  /**
    * 设置无敌状态
    * @param {boolean} flag 是否无敌
    * @param {number} duration 持续时间（毫秒）
    */
   setInvincible(flag, duration = 3000) {
-    const mainMesh = this.instance && this.instance.children[0]
     if (flag) {
       this.isInvincible = true
-      // ====== 设置材质为透明 ======
-      if (mainMesh && mainMesh.material) {
-        mainMesh.material.transparent = true
-        mainMesh.material.opacity = 0.3
-      }
+      this._setMaterialEffect(null, 0.3) // 半透明
       if (this._invincibleTimeout)
         clearTimeout(this._invincibleTimeout)
       this._invincibleTimeout = setTimeout(() => {
         this.isInvincible = false
         this._invincibleTimeout = null
-        // ====== 恢复材质为正常 ======
-        if (mainMesh && mainMesh.material) {
-          mainMesh.material.opacity = 1
-          mainMesh.material.transparent = false
-        }
+        this._resetMaterial()
       }, duration)
     }
     else {
@@ -409,11 +435,7 @@ export default class User {
         clearTimeout(this._invincibleTimeout)
         this._invincibleTimeout = null
       }
-      // ====== 恢复材质为正常 ======
-      if (mainMesh && mainMesh.material) {
-        mainMesh.material.opacity = 1
-        mainMesh.material.transparent = false
-      }
+      this._resetMaterial()
     }
   }
 
@@ -423,32 +445,15 @@ export default class User {
    * @param {number} duration 持续时间（毫秒）
    */
   setSpeedUp(flag, duration = 5000) {
-    const mainMesh = this.instance && this.instance.children[0]
     if (flag) {
       this.isSpeedUp = true
-      // ====== 设置材质为透明红色 ======
-      if (mainMesh && mainMesh.material) {
-        // 记录原始颜色，便于恢复
-        if (!mainMesh.material._originalColor) {
-          mainMesh.material._originalColor = mainMesh.material.color.clone()
-        }
-        mainMesh.material.color.set('#ff0000') // 红色
-        mainMesh.material.transparent = true
-        mainMesh.material.opacity = 0.75
-      }
+      this._setMaterialEffect('#ff0000', 0.75) // 红色半透明
       if (this._speedUpTimeout)
         clearTimeout(this._speedUpTimeout)
       this._speedUpTimeout = setTimeout(() => {
         this.isSpeedUp = false
         this._speedUpTimeout = null
-        // ====== 恢复材质为原始颜色和不透明 ======
-        if (mainMesh && mainMesh.material) {
-          if (mainMesh.material._originalColor) {
-            mainMesh.material.color.copy(mainMesh.material._originalColor)
-          }
-          mainMesh.material.opacity = 1
-          mainMesh.material.transparent = false
-        }
+        this._resetMaterial()
       }, duration)
     }
     else {
@@ -457,14 +462,7 @@ export default class User {
         clearTimeout(this._speedUpTimeout)
         this._speedUpTimeout = null
       }
-      // ====== 恢复材质为原始颜色和不透明 ======
-      if (mainMesh && mainMesh.material) {
-        if (mainMesh.material._originalColor) {
-          mainMesh.material.color.copy(mainMesh.material._originalColor)
-        }
-        mainMesh.material.opacity = 1
-        mainMesh.material.transparent = false
-      }
+      this._resetMaterial()
     }
   }
 }

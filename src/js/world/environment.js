@@ -38,7 +38,6 @@ export default class Environment {
     this.sunLight.shadow.normalBias = 0.05
     this.sunLightPosition = new THREE.Vector3(17, 12, 6.5)
     this.sunLight.position.copy(this.sunLightPosition)
-    // this.scene.add(this.sunLight)
 
     // 设置 sunLight Target
     this.sunLight.target = new THREE.Object3D()

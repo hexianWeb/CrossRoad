@@ -54,11 +54,9 @@ export default class Experience extends EventEmitter {
     // 事件监听测试
     this.on('pause', () => {
       this.isPaused = true // 设置为暂停
-      console.warn('[Experience] 收到 pause 事件，暂停游戏')
     })
     this.on('resume', () => {
       this.isPaused = false
-      console.warn('[Experience] 收到 resume 事件，恢复游戏')
     })
   }
 
