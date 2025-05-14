@@ -172,27 +172,33 @@ export function getSwipeDirection(startX, startY, endX, endY) {
     return null // 滑动距离太短忽略
 
   if (isPortrait()) {
-    // 竖屏时只认斜向滑动
-    // 斜向判定：dx、dy 都不为0，且绝对值相近（tan45度附近）
-    if (dx !== 0 && dy !== 0 && Math.abs(Math.abs(dx) - Math.abs(dy)) < Math.max(Math.abs(dx), Math.abs(dy)) * 0.5) {
-      if (dx < 0 && dy < 0) {
-        // 左上
-        return 'left'
-      }
-      else if (dx < 0 && dy > 0) {
-        // 左下
-        return 'backward'
-      }
-      else if (dx > 0 && dy > 0) {
-        // 右下
+    // 竖屏下自定义滑动判定逻辑
+    // 定义 dy 的阈值范围
+    const MAX_DY = 30 // 可根据实际体验调整
+
+    // 左右滑动：dy 在一定范围内
+    if (Math.abs(dy) < MAX_DY) {
+      if (dx > 0) {
+        // 右滑
         return 'right'
       }
-      else if (dx > 0 && dy < 0) {
-        // 右上
-        return 'forward'
+      else if (dx < 0) {
+        // 左滑
+        return 'left'
       }
     }
-    // 非斜向滑动不响应
+    // 上下滑动：dy 超出范围，根据 dx 判断
+    if (Math.abs(dy) >= MAX_DY) {
+      if (dy < 0) {
+        // 上滑
+        return 'forward'
+      }
+      else if (dy > 0) {
+        // 下滑
+        return 'backward'
+      }
+    }
+    // 其他情况不响应
     return null
   }
   else {
