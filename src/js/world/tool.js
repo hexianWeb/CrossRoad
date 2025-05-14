@@ -1,4 +1,4 @@
-import { CAR_BOUNDARY_MAX, CAR_BOUNDARY_MIN, maxTileIndex, minTileIndex, SWIPE_THRESHOLD } from '../constants'
+import { CAR_BOUNDARY_MAX, CAR_BOUNDARY_MIN, MAX_TILE_INDEX, MIN_TILE_INDEX, SWIPE_THRESHOLD } from '../constants'
 import { ITEM_TYPES } from './ItemManager.js' // 引入道具类型
 
 // 随机生成 N 行地图元数据
@@ -28,7 +28,7 @@ export default function generateMetaRows(startRowIndex, N = 20) {
       const usedTileIndex = new Set()
       const trees = []
       while (trees.length < treeCount) {
-        const tileIndex = getRandomInt(minTileIndex, maxTileIndex)
+        const tileIndex = getRandomInt(MIN_TILE_INDEX, MAX_TILE_INDEX)
         if (!usedTileIndex.has(tileIndex)) {
           usedTileIndex.add(tileIndex)
           trees.push({
@@ -44,7 +44,7 @@ export default function generateMetaRows(startRowIndex, N = 20) {
       const usedItemTileIndex = new Set([...usedTileIndex])
       let tryCount = 0
       while (items.length < itemCount && tryCount < 10) {
-        const tileIndex = getRandomInt(minTileIndex, maxTileIndex)
+        const tileIndex = getRandomInt(MIN_TILE_INDEX, MAX_TILE_INDEX)
         if (!usedItemTileIndex.has(tileIndex)) {
           usedItemTileIndex.add(tileIndex)
           items.push({
@@ -92,7 +92,7 @@ export default function generateMetaRows(startRowIndex, N = 20) {
       const usedItemTileIndex = new Set([...usedTileIndex])
       let tryCount = 0
       while (items.length < itemCount && tryCount < 10) {
-        const tileIndex = getRandomInt(minTileIndex, maxTileIndex)
+        const tileIndex = getRandomInt(MIN_TILE_INDEX, MAX_TILE_INDEX)
         if (!usedItemTileIndex.has(tileIndex)) {
           usedItemTileIndex.add(tileIndex)
           items.push({
@@ -139,7 +139,7 @@ export function getTargetRotation(dir) {
  */
 export function endsUpInValidPosition(targetTile, metaData) {
   // 1. 边界检查
-  if (targetTile.x < minTileIndex || targetTile.x > maxTileIndex)
+  if (targetTile.x < MIN_TILE_INDEX || targetTile.x > MAX_TILE_INDEX)
     return false
   if (targetTile.z <= -5)
     return false

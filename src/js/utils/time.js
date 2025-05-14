@@ -18,6 +18,8 @@ export default class Time extends EventEmitter {
   tick() {
     const currentTime = Date.now()
     this.delta = currentTime - this.current
+    // 限制 delta 最大值，防止离屏后回来的大跳帧
+    this.delta = Math.min(this.delta, 50) // 50ms，约等于20帧/秒
     this.current = currentTime
     this.elapsed = this.current - this.start
 

@@ -1,7 +1,5 @@
 // 引入 Experience 单例
-// import Experience from '../experience.js'
-
-import { minTileIndex, tilesPerRow } from '../constants.js'
+import { MIN_TILE_INDEX, tilesPerRow } from '../constants.js'
 
 export default class Road {
   /**
@@ -27,7 +25,7 @@ export default class Road {
       return
     }
     for (let i = 0; i < tilesPerRow; i++) {
-      const tileIndex = minTileIndex + i
+      const tileIndex = MIN_TILE_INDEX + i
       // 克隆道路模型
       const roadMesh = roadResource.scene.clone()
       // 递归设置所有 mesh 可接收阴影

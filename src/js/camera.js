@@ -67,7 +67,7 @@ export default class Camera {
     this.trackballControls.noZoom = false // 启用缩放
     this.trackballControls.zoomSpeed = 1 // 设置缩放速度
     this.trackballControls.minZoom = 0.5
-    this.trackballControls.maxZoom = 10
+    this.trackballControls.maxZoom = 5
 
     // 同步两个控制器的目标点
     this.trackballControls.target.copy(this.target)

@@ -1,4 +1,4 @@
-import { minTileIndex, tilesPerRow } from '../constants.js'
+import { MIN_TILE_INDEX, tilesPerRow } from '../constants.js'
 
 export default class Grass {
   constructor(scene, resources, rowIndex = 0) {
@@ -21,7 +21,7 @@ export default class Grass {
     }
     for (let i = 0; i < tilesPerRow; i++) {
       // 计算当前tile的地图下标
-      const tileIndex = minTileIndex + i
+      const tileIndex = MIN_TILE_INDEX + i
       // 克隆tile模型
       const tileMesh = tileResource.scene.clone()
       // 递归设置所有 mesh 可接收阴影

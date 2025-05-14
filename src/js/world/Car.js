@@ -25,18 +25,7 @@ export default class Car {
     this.carShakeParams = []
     this.addCars()
 
-    // 标记当前页面是否处于激活状态（可见）
-    this.isActive = true
-    // 绑定事件监听，检测页面可见性变化
-    document.addEventListener('visibilitychange', this.handleVisibilityChange.bind(this))
-
     this.experience.on('itemCollected', this.applyClockEffect.bind(this))
-  }
-
-  // 处理页面可见性变化
-  handleVisibilityChange() {
-    // document.visibilityState === 'visible' 时页面可见，否则不可见
-    this.isActive = document.visibilityState === 'visible'
   }
 
   // 添加所有车辆到当前行
@@ -95,16 +84,11 @@ export default class Car {
 
   // 更新车辆位置（可用于动画）
   update() {
-    // 只有页面可见时才进行车辆位置更新，节省资源
-    if (!this.isActive)
-      return
     // 获取全局已用时间，单位ms，转为秒
     const t = this.time.elapsed * 0.03 * this.timeMultiplier
     this.carMeshes.forEach((car, idx) => {
       // 车辆移动方向
       const dir = this.direction ? 1 : -1
-      car.position.x += dir * this.speed * this.time.delta * 1 / 60 * 0.23 * this.timeMultiplier
-
       // 边界判断与循环
       if (dir === 1 && car.position.x > CAR_BOUNDARY_MAX) {
         car.position.x = CAR_BOUNDARY_MIN
@@ -112,6 +96,9 @@ export default class Car {
       else if (dir === -1 && car.position.x < CAR_BOUNDARY_MIN) {
         car.position.x = CAR_BOUNDARY_MAX
       }
+
+      car.position.x += dir * this.speed * this.time.delta * 1 / 60 * 0.23 * this.timeMultiplier
+
       // === 车身抖动：模拟不平路面 ===
       // 抖动参数
       const shake = this.carShakeParams[idx]

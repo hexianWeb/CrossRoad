@@ -64,29 +64,23 @@ export default class World {
         switch (type) {
           case ITEM_TYPES.SHOE:
             duration = SHOE_EFFECT_DURATION_MS
+            this.user.setSpeedUp(true, SHOE_EFFECT_DURATION_MS)
+            console.warn('[道具] 获得加速鞋，小鸡加速5秒')
             break
           case ITEM_TYPES.CLOCK:
             duration = CLOCK_EFFECT_DURATION_MS
             break
           case ITEM_TYPES.SHEID:
             duration = SHEID_EFFECT_DURATION_MS
+            // 3秒无敌
+            this.user.setInvincible(true, SHEID_EFFECT_DURATION_MS)
+            // 可选：提示无敌状态
+            console.warn('[道具] 获得无敌盾，小鸡无敌3秒')
             break
           default:
-            duration = 3000 // 默认3秒
+            duration = SHEID_EFFECT_DURATION_MS // 默认3秒
         }
         showItemEffectMask(type, duration)
-
-        if (type === ITEM_TYPES.SHEID && this.user) {
-          // 3秒无敌
-          this.user.setInvincible(true, SHEID_EFFECT_DURATION_MS)
-          // 可选：提示无敌状态
-          console.warn('[道具] 获得无敌盾，小鸡无敌3秒')
-        }
-
-        if (type === ITEM_TYPES.SHOE && this.user) {
-          this.user.setSpeedUp(true, SHOE_EFFECT_DURATION_MS)
-          console.warn('[道具] 获得加速鞋，小鸡加速5秒')
-        }
       })
     })
   }
@@ -123,19 +117,17 @@ export default class World {
         if (this.itemManager) {
           this.itemManager.checkUserTile(this.user.currentTile)
         }
+        // === 相机和光照跟随 ===
+        this.camera.instance.lookAt(this.user.agentGroup.position)
+        this.environment.sunLight.target.position.copy(this.user.agentGroup.position)
+        this.user.update()
       }
-    }
-    if (this.user) {
-      this.camera.instance.lookAt(this.user.agentGroup.position)
-      this.environment.sunLight.target.position.copy(this.user.agentGroup.position)
-      this.user.update()
     }
   }
 
   // 游戏结束处理方法
   async onGameOver() {
-    this.experience.trigger('restart')
-    const username = localStorage.getItem('username') || '匿名'
+    const username = localStorage.getItem('username') || 'unknown'
     const score = this.user.maxZ || 0
     try {
       await supabase.from(SUPABASE_TABLE).insert([{ username, score }])
@@ -143,8 +135,12 @@ export default class World {
     catch (e) {
       console.warn('分数上传失败', e)
     }
+    finally {
+      this.experience.trigger('restart')
+    }
   }
 
+  // 游戏重启处理方法
   async onRestart() {
     this.map.resetMap()
     this.user.reset()
