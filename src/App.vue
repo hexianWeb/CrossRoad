@@ -10,6 +10,7 @@ const threeCanvas = ref(null)
 const maxZScore = ref(0)
 const itemScoreSum = ref(0)
 const highScore = ref(Number(localStorage.getItem('highScore') || 0))
+const showTryAgain = ref(false)
 
 onMounted(() => {
   // 初始化 three.js 场景
@@ -35,6 +36,11 @@ onMounted(() => {
   exp.on('restart', () => {
     itemScoreSum.value = 0
     maxZScore.value = 0
+    // 显示 Try again 覆盖层，1 秒后自动隐藏
+    showTryAgain.value = true
+    setTimeout(() => {
+      showTryAgain.value = false
+    }, 1000)
   })
 })
 </script>
@@ -49,6 +55,12 @@ onMounted(() => {
     <ScorePanel :score="maxZScore + itemScoreSum" :high-score="highScore" />
     <!-- 按键反馈指示器 -->
     <KeyIndicator v-if="!isMobile()" />
+    <!-- Try again 覆盖层 -->
+    <div v-if="showTryAgain" class="try-again-overlay">
+      <div class="try-again-text">
+        Try again
+      </div>
+    </div>
   </div>
 </template>
 
@@ -57,5 +69,25 @@ onMounted(() => {
   width: 100vw;
   height: 100vh;
   display: block;
+}
+/* Try again 覆盖层样式 */
+.try-again-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  flex-direction: column;
+}
+.try-again-text {
+  color: #fff;
+  font-size: 4rem;
+  font-weight: bold;
+  text-shadow: 0 2px 8px #000;
 }
 </style>

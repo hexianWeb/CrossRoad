@@ -3,7 +3,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls.js'
 
 import Experience from './experience.js'
-import { isLandscape, isMobile, isPortrait } from './world/tool.js'
+import { isLandscape, isMobile } from './world/tool.js'
 
 export default class Camera {
   constructor(orthographic = false) {
@@ -21,8 +21,6 @@ export default class Camera {
     this.setInstance()
     this.setControls()
     this.setDebug()
-
-    window.addEventListener('resize', this.handleResizeForMobile.bind(this))
   }
 
   setInstance() {
@@ -105,7 +103,7 @@ export default class Camera {
 
   resize() {
     if (this.orthographic) {
-      const aspect = this.sizes.aspect
+      const aspect = this.sizes.width / this.sizes.height
       this.frustumSize = this.getAdaptiveFrustumSize()
       this.instance.left = (-this.frustumSize * aspect)
       this.instance.right = (this.frustumSize * aspect)
@@ -127,30 +125,23 @@ export default class Camera {
     this.trackballControls.update()
   }
 
+  // 获取自适应相机位置
   getAdaptivePosition() {
-    if (isMobile()) {
-      if (isLandscape()) {
-        return new THREE.Vector3(3, 4, 6)
-      }
-      else if (isPortrait()) {
-        return new THREE.Vector3(6, 4, 4.6)
-      }
-    }
-    return new THREE.Vector3(2.5, 4.3, 7.03)
+    if (!isMobile())
+      return new THREE.Vector3(2.5, 4.3, 7.03)
+    return isLandscape()
+      ? new THREE.Vector3(3, 4, 6)
+      : new THREE.Vector3(6, 4, 4.6)
   }
 
+  // 移动端自适应处理
   handleResizeForMobile() {
-    if (isMobile()) {
-      this.position = this.getAdaptivePosition()
-      this.updateCamera()
-    }
+    this.position = this.getAdaptivePosition()
+    this.updateCamera()
   }
 
+  // 获取自适应正交相机视锥体大小
   getAdaptiveFrustumSize() {
-    if (isMobile()) {
-      return 4
-    }
-    // PC端
-    return 3
+    return isMobile() ? 4 : 3
   }
 }
