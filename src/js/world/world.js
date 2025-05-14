@@ -7,6 +7,7 @@ import { supabase } from '../utils/supabase.js'
 import Environment from './environment.js'
 import { ITEM_TYPES } from './ItemManager.js'
 import Map from './Map.js'
+import { debounce } from './tool.js'
 import User from './User.js'
 
 export default class World {
@@ -83,12 +84,19 @@ export default class World {
         showItemEffectMask(type, duration)
       })
     })
+
+    // 游戏结束防抖标志
+    this.isGameOver = false
+
+    // 在构造函数中包裹一次
+    this.uploadScore = debounce(this.uploadScore.bind(this), 1000)
   }
 
   update() {
+    // 如果游戏已结束，直接返回，防止继续执行 update 逻辑
     if (this.map) {
       this.map.update()
-      if (this.user) {
+      if (this.user && !this.isGameOver) {
         this.map.checkAndExtendMap(this.user.currentTile.z)
         // === 碰撞检测 ===
         // 获取玩家mesh和所在行
@@ -117,16 +125,18 @@ export default class World {
         if (this.itemManager) {
           this.itemManager.checkUserTile(this.user.currentTile)
         }
-        // === 相机和光照跟随 ===
-        this.camera.instance.lookAt(this.user.agentGroup.position)
-        this.environment.sunLight.target.position.copy(this.user.agentGroup.position)
-        this.user.update()
       }
+    }
+    if (this.user) {
+      // === 相机和光照跟随 ===
+      this.camera.instance.lookAt(this.user.agentGroup.position)
+      this.environment.sunLight.target.position.copy(this.user.agentGroup.position)
+      this.user.update()
     }
   }
 
-  // 游戏结束处理方法
-  async onGameOver() {
+  // 新增上传分数方法
+  async uploadScore() {
     const username = localStorage.getItem('username') || 'unknown'
     const score = this.user.maxZ || 0
     try {
@@ -140,8 +150,18 @@ export default class World {
     }
   }
 
+  // 游戏结束处理方法，增加防抖
+  async onGameOver() {
+    if (this.isGameOver)
+      return
+    this.isGameOver = true
+    this.uploadScore() // 这里自动防抖
+  }
+
   // 游戏重启处理方法
   async onRestart() {
+    // 重置防抖标志
+    this.isGameOver = false
     this.map.resetMap()
     this.user.reset()
   }

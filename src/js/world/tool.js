@@ -168,37 +168,30 @@ export function getSwipeDirection(startX, startY, endX, endY) {
   const dx = endX - startX
   const dy = endY - startY
   // 使用常量控制滑动灵敏度
-  if (Math.abs(dx) < SWIPE_THRESHOLD && Math.abs(dy) < SWIPE_THRESHOLD)
+  if (Math.abs(dx) < SWIPE_THRESHOLD * 0.5 && Math.abs(dy) < SWIPE_THRESHOLD)
     return null // 滑动距离太短忽略
 
   if (isPortrait()) {
-    // 竖屏下自定义滑动判定逻辑
-    // 定义 dy 的阈值范围
-    const MAX_DY = 30 // 可根据实际体验调整
-
-    // 左右滑动：dy 在一定范围内
-    if (Math.abs(dy) < MAX_DY) {
-      if (dx > 0) {
-        // 右滑
-        return 'right'
-      }
-      else if (dx < 0) {
-        // 左滑
+    // 竖屏时只认斜向滑动
+    if (dx !== 0 && dy !== 0) {
+      if (dx < 0 && dy < 0) {
+        // 左上
         return 'left'
       }
-    }
-    // 上下滑动：dy 超出范围，根据 dx 判断
-    if (Math.abs(dy) >= MAX_DY) {
-      if (dy < 0) {
-        // 上滑
-        return 'forward'
+      else if (dx > 0 && dy > 0) {
+        // 右下
+        return 'right'
       }
-      else if (dy > 0) {
-        // 下滑
+      else if (dx < 0 && dy > 0) {
+        // 左下
         return 'backward'
       }
+      else if (dx > 0 && dy < 0) {
+        // 右上
+        return 'forward'
+      }
     }
-    // 其他情况不响应
+    // 非斜向滑动不响应
     return null
   }
   else {
@@ -227,4 +220,22 @@ export function isLandscape() {
 // 判断是否为竖屏
 export function isPortrait() {
   return window.innerHeight >= window.innerWidth
+}
+
+/**
+ * 防抖函数
+ * @param {Function} func 需要防抖的函数
+ * @param {number} wait 延迟时间（毫秒）
+ * @returns {Function} 防抖后的新函数
+ */
+export function debounce(func, wait = 300) {
+  let timeout = null
+  return function (...args) {
+    // 保留 this 上下文
+    const context = this
+    clearTimeout(timeout)
+    timeout = setTimeout(() => {
+      func.apply(context, args)
+    }, wait)
+  }
 }
