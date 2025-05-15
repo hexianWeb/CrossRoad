@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
 
 import Experience from '../experience.js'
+import Float from './float.js'
 
 export default class TextMesh {
   constructor(options = {}) {
@@ -45,6 +46,8 @@ export default class TextMesh {
       { from: new THREE.Color('#56b868'), to: new THREE.Color('#afc97b') },
     ]
 
+    this.float = new Float({ speed: 0.5, floatIntensity: 0.21, rotationIntensity: 0.21 })
+
     // 资源加载完成后生成文字
     this.resources.on('ready', () => {
       const fontSource = this.resources.items[this.font]
@@ -64,13 +67,10 @@ export default class TextMesh {
     this.textGroups = []
     const spaceOffset = 1
 
-    for (const [_index, text] of this.texts.entries()) {
+    for (const [__index, text] of this.texts.entries()) {
       const words = new THREE.Group()
       words.letterOff = 0
-      // const randomColor = this.colors[_index % this.colors.length] // 已不再使用
-
-      for (const [_index_, letter] of [...text].entries()) {
-        // const progress = text.length > 1 ? _index_ / (text.length - 1) : 0.5 // 已不再使用
+      for (const [__index__, letter] of [...text].entries()) {
         // 使用 matcap 材质
         const material = new THREE.MeshMatcapMaterial({
           matcap: matcapTexture,
@@ -99,7 +99,7 @@ export default class TextMesh {
         letter.position.x -= words.letterOff * 0.5
       }
       this.textGroups.push(words)
-      this.scene.add(words)
+      this.float.add(words) // 使用 Float 管理
     }
     // 居中整个文字块
     this.centerTextBlock()
@@ -108,6 +108,8 @@ export default class TextMesh {
       words.position.add(this.position)
       words.rotation.copy(this.rotation)
     }
+    // 只需将 float.group 添加到场景一次
+    this.scene.add(this.float.group)
   }
 
   // 居中整个文字块
@@ -119,6 +121,13 @@ export default class TextMesh {
     const center = boundingBox.getCenter(new THREE.Vector3())
     for (const words of this.textGroups) {
       words.position.sub(center)
+    }
+  }
+
+  // 提供 update 方法驱动浮动动画
+  update() {
+    if (this.float) {
+      this.float.update()
     }
   }
 }

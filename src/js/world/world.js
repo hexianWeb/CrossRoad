@@ -3,7 +3,7 @@ import * as THREE from 'three'
 import TextMesh from '../components/text-mesh.js'
 import { CLOCK_EFFECT_DURATION_MS, SHEID_EFFECT_DURATION_MS, SHOE_EFFECT_DURATION_MS, SUPABASE_TABLE } from '../constants.js'
 import Experience from '../experience.js'
-import { showItemEffectMask } from '../utils/itemEffectMask.js'
+import { showItemDom, showItemEffectMask } from '../utils/itemUi.js'
 import { supabase } from '../utils/supabase.js'
 import Environment from './environment.js'
 import { ITEM_TYPES } from './ItemManager.js'
@@ -109,6 +109,7 @@ export default class World {
         default:
           duration = SHEID_EFFECT_DURATION_MS // 默认3秒
       }
+      showItemDom(type, duration)
       showItemEffectMask(type, duration)
     })
   }
@@ -153,6 +154,9 @@ export default class World {
       // === 相机和光照跟随 ===
       this.camera.instance.lookAt(this.user.agentGroup.position)
       this.environment.sunLight.target.position.copy(this.user.agentGroup.position)
+    }
+    if (this.textMesh) {
+      this.textMesh.update()
     }
   }
 
