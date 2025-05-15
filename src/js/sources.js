@@ -18,6 +18,16 @@
  */
 export default [
   {
+    name: 'fontSource',
+    type: 'font',
+    path: './fonts/helvetiker_bold.typeface.json',
+  },
+  {
+    name: 'matcapGreen',
+    type: 'texture',
+    path: './textures/matcap/4A6442_D0AB75_81CD94_181B12-64px.png',
+  },
+  {
     name: 'environmentMapTexture',
     type: 'cubeTexture',
     path: [

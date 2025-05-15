@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 
+import TextMesh from '../components/text-mesh.js'
 import { CLOCK_EFFECT_DURATION_MS, SHEID_EFFECT_DURATION_MS, SHOE_EFFECT_DURATION_MS, SUPABASE_TABLE } from '../constants.js'
 import Experience from '../experience.js'
 import { showItemEffectMask } from '../utils/itemEffectMask.js'
@@ -43,6 +44,13 @@ export default class World {
     // 相机和光照跟随用户
     this.user.agentGroup.add(this.camera.instance)
     this.user.agentGroup.add(this.environment.sunLight)
+
+    // ===== 新增：添加 3D 文字到场景正后方 =====
+    this.textMesh = new TextMesh({
+      texts: ['Pass the Road'], // 可自定义内容
+      position: new THREE.Vector3(0, 0.9, -6), // 场景正后方
+      rotation: new THREE.Euler(0, 0, 0),
+    })
   }
 
   // 事件监听初始化
