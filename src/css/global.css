@@ -56,3 +56,39 @@ body {
 .flash {
   animation: flash 0.8s linear infinite;
 }
+
+.item-border-image {
+  border-width: 4px;
+  border-style: solid;
+  border-image: url('/image/border.png') 16 fill stretch;
+  border-radius: 0.75rem; /* 12px, 更大圆角 */
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#item-effect-indicator {
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none; /* 禁止所有交互 */
+}
+
+#item-effect-indicator * {
+  pointer-events: none; /* 禁止所有子元素交互 */
+}
+
+@media (max-width: 640px) {
+  #item-effect-indicator {
+    right: 0.5rem !important;
+    top: 60%;
+    transform: translateY(-60%);
+    gap: 0.5rem !important;
+  }
+  .item-border-image {
+    width: 48px !important;
+    height: 48px !important;
+    border-width: 3px !important;
+    border-radius: 0.5rem !important;
+  }
+}
