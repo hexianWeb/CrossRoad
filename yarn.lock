@@ -1264,6 +1264,11 @@
     "@eslint/core" "^0.13.0"
     levn "^0.4.1"
 
+"@hackernoon/pixel-icon-library@^1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@hackernoon/pixel-icon-library/-/pixel-icon-library-1.0.5.tgz#47082e2cb204cb68a0abaaa6c785e506c9007cfc"
+  integrity sha512-ZesX/GhUScxDx1c/bu93jb7HK181e9hGhIyA8YWDZZigA5T8KdGCTvabBPSkZ5U1xixPK4WB7en/wtCTSe5SNw==
+
 "@humanfs/core@^0.19.1":
   version "0.19.1"
   resolved "https://registry.yarnpkg.com/@humanfs/core/-/core-0.19.1.tgz#17c55ca7d426733fe3c561906b8173c336b40a77"
@@ -1343,6 +1348,15 @@
   dependencies:
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
+
+"@mmt817/pixel-ui@^1.4.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@mmt817/pixel-ui/-/pixel-ui-1.4.0.tgz#91b1d770f79e7bd1511b2b04a380d58f968c4608"
+  integrity sha512-mS8gNI1Um2qwWX4/7OUVPqD7nF8N5VMRkrpIaavq3DQReYua4MOTcRqG+VXhY6wXjAcJ9a6j1yXJcSKVhayiOg==
+  dependencies:
+    "@hackernoon/pixel-icon-library" "^1.0.5"
+    "@popperjs/core" "^2.11.8"
+    async-validator "^4.2.5"
 
 "@modelcontextprotocol/sdk@^1.8.0":
   version "1.11.0"
@@ -1495,6 +1509,11 @@
   integrity sha512-uh6W7sb55hl7D6vsAeA+V2p5JnlAqzhqFyF0VcJkKZXkgnFcVG9PziERRHQfPLfNGx1C292a4JqbWzhR8L4R1g==
   dependencies:
     playwright "1.52.0"
+
+"@popperjs/core@^2.11.8":
+  version "2.11.8"
+  resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.8.tgz#6b79032e760a0899cd4204710beede972a3a185f"
+  integrity sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
 
 "@rollup/pluginutils@^5.1.4":
   version "5.1.4"
@@ -2243,6 +2262,11 @@ async-function@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/async-function/-/async-function-1.0.0.tgz#509c9fca60eaf85034c6829838188e4e4c8ffb2b"
   integrity sha512-hsU18Ae8CDTR6Kgu9DYf0EbCr/a5iGL0rytQDobUcdpYOKokk8LEjVphnXkDkgpi0wYVsqrXuP0bZxJaTqdgoA==
+
+async-validator@^4.2.5:
+  version "4.2.5"
+  resolved "https://registry.yarnpkg.com/async-validator/-/async-validator-4.2.5.tgz#c96ea3332a521699d0afaaceed510a54656c6339"
+  integrity sha512-7HhHjtERjqlNbZtqNqy2rckN/SpOOlmDliet+lP7k+eKZEjPk3DgyeU9lIXLdeLz0uBbbVp+9Qdow9wJWgwwfg==
 
 autoprefixer@^10.4.20:
   version "10.4.21"

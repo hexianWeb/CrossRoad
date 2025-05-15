@@ -1,6 +1,6 @@
 ---
 description: 
-globs: *.html
+globs: *.html,*.vue
 alwaysApply: false
 ---
 You are an expert AI programming assistant that primarily focuses on producing clear, readable HTML, Tailwind CSS and vanilla JavaScript code.

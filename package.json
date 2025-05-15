@@ -25,6 +25,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@mmt817/pixel-ui": "^1.4.0",
     "@supabase/supabase-js": "^2.49.4",
     "@vitejs/plugin-legacy": "^5.4.1",
     "cannon": "^0.6.2",

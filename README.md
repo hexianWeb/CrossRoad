@@ -1,180 +1,257 @@
-[node]: https://nodejs.org/en
-[yarn]: https://yarnpkg.com
-[pnpm]: https://pnpm.io
-[demo]: https://vite-three-js.d1a.app
-[license]: https://github.com/doinel1a/vite-three-js/blob/main/LICENSE
-[code-of-conduct]: https://github.com/doinel1a/vite-three-js/blob/main/CODE_OF_CONDUCT.md
-[issues]: https://github.com/doinel1a/vite-three-js/issues
-[pulls]: https://github.com/doinel1a/vite-three-js/pulls
-[browserslist]: https://browsersl.ist/#q=last+3+versions%2C%3E+0.2%25%2C+not+dead
-[graphviz]: https://www.graphviz.org/download
-[commitlint]: https://github.com/conventional-changelog/commitlint/#what-is-commitlint
-[webpack-three-js]: https://github.com/doinel1a/webpack-three-js
-[react-icon]: https://skillicons.dev/icons?i=react
-[ts-icon]: https://skillicons.dev/icons?i=ts
-[js-icon]: https://skillicons.dev/icons?i=js
-[tailwind-icon]: https://skillicons.dev/icons?i=tailwind
-[chrome-icon]: https://github.com/alrra/browser-logos/blob/main/src/chrome/chrome_64x64.png
-[firefox-icon]: https://github.com/alrra/browser-logos/blob/main/src/firefox/firefox_64x64.png
-[edge-icon]: https://github.com/alrra/browser-logos/blob/main/src/edge/edge_64x64.png
-[opera-icon]: https://github.com/alrra/browser-logos/blob/main/src/opera/opera_64x64.png
-[safari-icon]: https://github.com/alrra/browser-logos/blob/main/src/safari/safari_64x64.png
+# 2.5D 小鸡过马路 Demo
+![Cover](./cover.png)
+![Cover2](./cover2.png)
 
-# Vite Three JS — Template
+一款基于 Three.js 的 2.5D 视角休闲小游戏 Demo。玩家操控一只小鸡不断穿越马路，躲避来往小车，并在过程中收集道具以获取分数和单次可用的特殊能力。
 
-This boilerplate starter template is the ultimate solution to help you getting started on your project in no time, without the hassle of setting up and configuring your environment from scratch each time you start developing. <br />
-It's ideal for front-end engineers who want to build modern, fast and reliable **webgl** web applications with the latest cutting edge technologies such as **Three.JS**, **GLSL**, **JavaScript**, **TailwindCSS**, **Vite**, **ESLint**, **Prettier**, **Husky** and much more!
+## 🎮 游戏特色
 
-**[Demo][demo]** | **[Bug(label: bug)][issues]** | **[Feature(label: enhancement)][issues]**
+- 2.5D 视角的休闲玩法
+- 丰富的道具系统
+- 流畅的操控体验
+- 精美的视觉效果
 
-## :bookmark: Table of contents
+## 🎯 主要功能
 
-- :computer: [Getting started](#computer-getting-started "Go to 'Getting started' section")
-- :battery: [Features](#battery-features "Go to 'Features' section")
-- :arrows_clockwise: [Versions](#arrows_clockwise-versions "Go to 'Versions' section")
-- :globe_with_meridians: [Browsers support](#globe_with_meridians-browsers-support "Go to 'Browsers support' section")
-- :busts_in_silhouette: [Contribute](#busts_in_silhouette-contribute "Go to 'Contribute' section")
-- :bookmark_tabs: [License](#bookmark_tabs-license "Go to 'License' section")
-- :gem: [Acknowledgements](#gem-acknowledgements "Go to 'Acknowledgements' section")
+- **主角操控**: 通过键盘/触屏控制小鸡移动
+- **障碍系统**: 躲避不断移动的车辆
+- **道具系统**:
+  - 加速鞋: 10秒内移动速度提升
+  - 无敌盾: 10秒内碰撞车辆不失败
+  - 时停表: 5秒内所有车辆减速
+  - 随机箱: 随机触发以上效果
+- **UI系统**: 道具状态、能力状态、结算界面等
 
----
+## 🔧 技术栈
 
-## :computer: Getting started
+- Three.js - 3D渲染引擎
+- Vite - 构建工具
+- TailwindCSS - UI样式
+- GSAP - 动画系统
 
-### Prerequisites:
+## 🎯 目标用户
 
-- JavaScript runtime **[node.js][node]**;
-- **(OPTIONAL)** Alternative package manager:
-  - **[PNPM][pnpm]** `npm install --global pnpm` <br /> or
-  - **[Yarn][yarn]** `npm install --global yarn`
+- Three.js/前端开发者
+- 图形学学习者
+- 休闲游戏玩家
+- 需要2.5D案例的教育场景
 
-### Start developing:
+## 当前开发进度
 
-- Get the repository:
-  - click **"Use this template"** &nbsp; or &nbsp; **"Fork"** button <br /> alternately
-  - **clone** the repository through your terminal: <br />
-    `git clone https://github.com/doinel1a/vite-three-js YOUR-PROJECT-NAME`;
-- Open your terminal or code editor to the path your project is located, and run:
-  | | **NPM** | **PNPM** | **Yarn** |
-  | ------------------------------------------------ | ----------------- | -------------- | -------------- |
-  | To **install** the dependencies | `npm install` | `pnpm install` | `yarn install` |
-  | To **run** the **development server** | `npm run dev` | `pnpm dev` | `yarn dev` |
-  | To **build** your app **for production** | `npm run build` | `pnpm build` | `yarn build` |
-  | To **preview** your **production optimized app** | `npm run preview` | `pnpm preview` | `yarn preview` |
+- ✅ 主角操控已完成
+- ✅ 障碍与挑战已完成
+- ⚡ 道具功能已完成（Three.js部分）
+  - ✅ 加速鞋：获得后10秒内移动速度提升
+  - ✅ 无敌盾：获得后10秒内碰撞车辆不失败
+  - ✅ 时停表：获得后5秒内所有车辆减速至0.1倍速
+  - ✅ 随机箱：随机触发上述任意一种道具效果
+- ✅ UI系统开发中
+  - ✅ 道具状态显示
+  - ✅ 特殊能力状态栏
+  - ✅ 游戏结束界面
 
-[Back to :arrow_up:](#vite-three-js--template "Back to 'Table of contents' section")
+## 一、项目概述与目标
+
+本项目为一款基于 Three.js 的 2.5D 视角休闲小游戏 Demo。玩家操控一只小鸡不断穿越马路，躲避来往小车，并在过程中收集道具以获取分数和单次可用的特殊能力。项目旨在展示 Three.js 在 2.5D 场景下的交互、动画与资源管理能力，适合作为图形学教学、Three.js 框架实践或小游戏原型开发参考。
 
 ---
 
-## :battery: Features
+## 二、目标用户
 
-This repository comes 🔋 packed with:
-
-- **Three.JS**: A JavaScript library built on top of **WebGL** that provides an abstraction layer for rendering interactive 3D and 2D scenes in the web browser;
-- **TailwindCSS**: A utility-first CSS framework that provides predefined classes for common styles and layout patterns, allowing quick styling without writing custom CSS;
-- **SASS**: A CSS preprocessor that adds features such as variables, nesting, and mixins to CSS, making it easier to write and maintain large CSS codebases;
-- **PostCSS**: A tool for transforming CSS with JavaScript plugins, allowing to add new features to CSS and improve the development process;
-- **Playwright**: A library for automating web browser interactions, allowing the writing of end-to-end tests and perform browser automation tasks;
-- **Vite**: A build tool and development server that provides fast and efficient development and production builds for modern web applications;
-
-And with tools that enhance the development experience:
-
-- **ESLint**: A tool for enforcing coding standards and identifying potential errors in the code;
-- **Prettier**: A code formatter that automatically formats code to conform to a consistent style, making it easier to read and maintain;
-- **Husky**: A Git hook manager that allows easy set up and configuration of Git hooks, which are scripts that run at certain points in the Git workflow;
-- **Commitlint**: A tool for enforcing commit message conventions in Git repositories, helping to ensure consistent and informative commit messages;
-
-[Back to :arrow_up:](#vite-three-js--template "Back to 'Table of contents' section")
+- Three.js/前端开发者、图形学学习者
+- 喜欢休闲小游戏的玩家
+- 需要 2.5D 交互案例的教育/演示场景
 
 ---
 
-## :arrows_clockwise: Versions
+## 三、核心功能与玩法
 
-This repository comes configured with 2 of the industry standards for development tools: **Webpack** and **Vite**. <br />
-Both tools support **SWC (Speedy Web Compiler)**, a **Rust-based compiler**; Vite is optimized for it out of the box.
+1. **主角操控**
+   - 玩家通过键盘（或触屏）控制小鸡上下左右移动。
+   - 小鸡只能沿固定路径（马路格子）移动，具备基础动画。
 
-### Vite (SWC compiler)
+2. **障碍与挑战**
+   - 马路上有不断移动的小车，碰撞即失败。
+   - 小车速度、数量可随关卡进度递增。
 
-Is a simple and fast solution thanks to it's "zero-config" approach which offers a smoother development experience.
+3. **道具与分数**
+   - 马路上随机生成可收集道具。
+   - 收集道具可获得分数，部分道具可赋予特殊能力。
+   - 已实现道具类型及功能：
+     - **无敌盾**：获得后10秒内小鸡无敌，碰撞车辆不失败。
+     - **加速鞋**：获得后10秒内小鸡移动速度提升。
+     - **时停表**：获得后5秒内所有车辆减速至0.1倍速。
+     - **随机箱**：获得后随机触发上述任意一种道具效果。
+   - 每种道具均以不同颜色/形状表现。
+   - 待实现：道具状态栏显示剩余时间。
 
-|                   React - TypeScript                   |                   React - JavaScript                   |     |       Vanilla TypeScript        |     Vanilla JavaScript      |
-| :----------------------------------------------------: | :----------------------------------------------------: | :-: | :-----------------------------: | :-------------------------: |
-| ![React][react-icon] & ![TS][ts-icon] <br /> **Soon!** | ![React][react-icon] & ![JS][js-icon] <br /> **Soon!** |     | ![TS][ts-icon] <br /> **Soon!** | ![JS][js-icon] <br /> **/** |
+4. **特殊能力**
+   - 玩家每局可通过收集道具获得一次特殊能力（如无敌、瞬移等），使用后消耗。
 
-### Webpack (Babel compiler)
+5. **分数与结算**
+   - 记录本局分数，支持最高分展示。
+   - 游戏失败后展示得分与重开选项。
 
-Is more a flexible solution, capable of handling complex configurations.
-
-|                   React - TypeScript                   |                   React - JavaScript                   |     |       Vanilla TypeScript        |                 Vanilla JavaScript                 |
-| :----------------------------------------------------: | :----------------------------------------------------: | :-: | :-----------------------------: | :------------------------------------------------: |
-| ![React][react-icon] & ![TS][ts-icon] <br /> **Soon!** | ![React][react-icon] & ![JS][js-icon] <br /> **Soon!** |     | ![TS][ts-icon] <br /> **Soon!** | ![JS][js-icon] <br /> **[Repo][webpack-three-js]** |
-
-[Back to :arrow_up:](#vite-three-js--template "Back to 'Table of contents' section")
-
----
-
-## :globe_with_meridians: Browsers support
-
-The provided configuration ensures **92.3%** coverage for all browsers, in particular of the following:
-
-|            Chrome             |             Firefox              |             Edge             |        Opera         | Safari                       |
-| :---------------------------: | :------------------------------: | :--------------------------: | :------------------: | ---------------------------- |
-| ![Google Chrome][chrome-icon] | ![Mozilla Firefox][firefox-icon] | ![Microsoft Edge][edge-icon] | ![Opera][opera-icon] | ![Apple Safari][safari-icon] |
-
-**\*** In order to support a wider percentage of browsers, update the `./.browserslistrc` configuration file:
-
-1. `last 3 versions`: browser version;
-2. `> 0.2%`: browser usage statistics;
-3. `not dead`: whether the browser is officially supported;
-
-Update the configuration [here][browserslist] and check in real-time the **global browsers support**.
-
-**\* The more versions to support, larger JS and CSS bundles size will be.**
-
-[Back to :arrow_up:](#vite-three-js--template "Back to 'Table of contents' section")
+6. **基础 UI**
+   - 分数、道具、特殊能力状态实时显示。
+   - 简单的开始、暂停、重开按钮。
 
 ---
 
-## :busts_in_silhouette: Contribute
+## 四、技术栈推荐
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create.
-Any contribution is greatly appreciated: big or small, it can be documentation updates, adding new features or something bigger.
-Please check the [**contributing guide**][code-of-conduct] for details on how to help out and keep in mind that all commits must follow the **[conventional commit format][commitlint]**.
-
-### How to contribute:
-
-1.  **[Get started](#computer-getting-started "Go to 'Getting started' section");**
-2.  **For a new feature:**
-    1.  Create a new branch: `git checkout -b feat/NEW-FEATURE`;
-    2.  Add your changes to the staging area: `git add PATH/TO/FILENAME.EXTENSION`;
-    3.  Commit your changes: `git commit -m "feat: NEW FEATURE"`;
-    4.  Push your new branch: `git push origin feat/NEW-FEATURE`;
-3.  **For a bug fix:**
-    1.  Create a new branch: `git checkout -b fix/BUG-FIX`;
-    2.  Add your changes to the staging area: `git add PATH/TO/FILENAME.EXTENSION`;
-    3.  Commit your changes: `git commit -m "fix: BUG FIX"`;
-    4.  Push your new branch: `git push origin fix/BUG-FIX`;
-4.  **Open a new [pull request][pulls];**
-
-[Back to :arrow_up:](#vite-three-js--template "Back to 'Table of contents' section")
+- **核心引擎**：Three.js（2.5D 场景渲染与动画）
+- **开发框架**：Vite + ES6/JS 类组件结构
+- **资源管理**：统一通过 Experience 单例管理（见项目架构）
+- **UI**：TailwindCSS
+- **动画**：GSAP（GreenSock Animation Platform）
+- **输入**：键盘/触屏事件监听
 
 ---
 
-## :bookmark_tabs: License
+## 五、概念性数据模型（补充与规范化）
 
-All logos and trademarks are the property of their respective owners.
-Everything else is distributed under the **MIT License**.
-See the [LICENSE][license] file for more informations.
+- **MapMetadata（地图元数据）**
+  - 结构为对象数组，每个对象代表一行，包含如下属性：
+    - `type`：字符串，行类型（如 "forest"、"car"、"truck"）
+    - **森林行（forest）**
+      - `trees`：数组，记录本行所有树木的位置与属性
+        - `tileIndex`：树所在的瓦片编号（-8 ~ 8）
+        - `height`：树的高度（可选，用于美术表现）
+    - **车辆行（car/truck）**
+      - `direction`：布尔值，车辆行驶方向（true/false）
+      - `speed`：数值，车辆行驶速度
+      - `vehicles`：数组，记录本行所有车辆的初始参数
+        - `initialTileIndex`：车辆初始所在瓦片编号
+        - `type`：车辆模型类型（如 'car01', 'truck01' 等，便于资源管理和美术扩展）
 
-[Back to :arrow_up:](#vite-three-js--template "Back to 'Table of contents' section")
+- **示例结构**
+  ```js
+  [
+    {
+      type: 'car',
+      direction: false,
+      speed: 188,
+      vehicles: [
+        { initialTileIndex: -4, type: 'car01' },
+        { initialTileIndex: -1, type: 'car02' },
+        { initialTileIndex: 4, type: 'car03' },
+      ],
+    },
+    {
+      type: 'forest',
+      trees: [
+        { tileIndex: -5, type: 'tree01' },
+        { tileIndex: 3, type: 'tree04' },
+      ],
+    },
+    {
+      type: 'truck',
+      direction: true,
+      speed: 125,
+      vehicles: [
+        { initialTileIndex: -4, type: 'truck01' },
+        { initialTileIndex: 0, type: 'truck02' },
+      ],
+    },
+  ]
+  ```
 
 ---
 
-## :gem: Acknowledgements
+## 地图生成与渲染流程（开发建议）
 
-Special thanks to:
+- 地图元数据建议以独立 JS/JSON 文件维护，便于关卡扩展与编辑。
+- 每种行类型的渲染逻辑应封装为独立函数/类，便于维护和复用。
+- 车辆参数（如速度、方向、type）可用于丰富玩法和美术表现。
+- 车辆与树木的生成应严格依据 metadata，保证地图与障碍物一致性。
+- 伪代码示例：
+  ```js
+  metadata.forEach((rowData, index) => {
+    if (rowData.type === 'forest') {
+      // 生成草地行并添加树
+    }
+    if (rowData.type === 'car') {
+      // 生成道路行并添加小车
+    }
+    if (rowData.type === 'truck') {
+      // 生成道路行并添加卡车
+    }
+  })
+  ```
 
-- [alrra](https://github.com/alrra) for [browser-logos](https://github.com/alrra/browser-logos);
-- [tandpfun](https://github.com/tandpfun) for [skill-icons](https://github.com/tandpfun/skill-icons);
+---
 
-[Back to :arrow_up:](#vite-three-js--template "Back to 'Table of contents' section")
+## 六、UI 设计原则
+
+- 2.5D 俯视/斜视视角，突出空间层次感
+- 画面简洁明快，色彩鲜明
+- 交互反馈及时（如碰撞、收集、能力激活有动画/音效提示）
+- UI 元素不遮挡主视野，分数与状态栏固定在屏幕边缘
+
+**待实现 UI 组件：**
+- **道具状态栏**：
+  - 位置：屏幕右侧中部
+  - 显示当前激活的道具图标及剩余时间
+  - 使用半透明背景确保不影响游戏视野
+  - 道具激活时有明显的视觉反馈（如图标高亮、边框动画等）
+- **游戏结束界面**：
+  - 居中显示的半透明弹窗
+  - 显示本局得分和最高分
+  - 提供重新开始按钮
+  - 可选显示本局收集的道具统计
+
+---
+
+## 七、安全性与数据管理
+
+- 本地存储最高分（localStorage）
+- 无需用户登录，数据仅限本地
+- 不涉及第三方支付或敏感信息
+
+---
+
+## 八、开发阶段与里程碑
+
+1. **基础框架搭建** ✅
+   - Three.js 场景、主循环、资源加载
+2. **主角与障碍物实现** ✅
+   - 小鸡与小车模型、移动与碰撞检测
+3. **道具与分数系统** ⚡
+   - ✅ Three.js 部分：随机生成道具、分数统计、道具效果
+   - ⏳ UI 部分：道具状态显示、游戏结束界面
+4. **特殊能力与动画** ✅
+   - 能力触发、动画反馈
+5. **UI 与交互完善** ⏳
+   - 分数、状态栏、按钮
+6. **测试与优化** ⏳
+   - 性能、交互、BUG 修复
+
+---
+
+## 九、潜在挑战与解决方案
+
+- **碰撞检测精度**：采用 AABB 或简化的包围盒检测，兼顾性能与准确性
+- **2.5D 视觉表现**：通过正交/斜投影相机与地面贴图实现空间感
+- **资源管理**：统一通过 Experience 单例管理，避免资源泄漏
+- **动画流畅性**：合理使用 requestAnimationFrame 与 Three.js 动画系统
+
+---
+
+## 十、未来扩展可能性
+
+- 增加更多关卡与障碍类型
+- 丰富道具与特殊能力
+- 排行榜与社交分享
+- 移动端适配与触屏优化
+
+---
+
+## 十一、验收标准
+
+- 玩家可流畅操控小鸡穿越马路
+- 小车与小鸡碰撞检测准确
+- 道具收集与分数统计正常
+- 特殊能力可用且有明显反馈
+- UI 信息完整、交互顺畅
+- 代码结构清晰，易于扩展
