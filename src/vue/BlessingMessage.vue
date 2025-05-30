@@ -12,7 +12,7 @@ const props = defineProps({
 
 <template>
   <div class="fixed top-0 left-0 w-full flex justify-center z-[9999] select-none pointer-events-none">
-    <div class="mt-6 bg-green-600 bg-opacity-70 text-white text-xl md:text-2xl font-bold px-8 py-3 rounded-xl shadow-lg animate-fade-in-down">
+    <div v-if="props.show" class="mt-6 bg-green-600 bg-opacity-70 text-white text-xl md:text-2xl font-bold px-8 py-3 rounded-xl shadow-lg animate-fade-in-down">
       {{ props.text }}
     </div>
   </div>
