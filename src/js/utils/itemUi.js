@@ -9,6 +9,7 @@ const ITEM_TYPE_GRADIENTS = {
   SHOE: 'radial-gradient(ellipse at center, transparent 70%, rgba(255,0,0,0.7) 100%)', // 红色
   CLOCK: 'radial-gradient(ellipse at center, transparent 70%, rgba(0,120,255,0.7) 100%)', // 蓝色
   SHEID: 'radial-gradient(ellipse at center, transparent 70%, rgba(255,255,0,0.7) 100%)', // 黄色
+  ZONGZI: 'radial-gradient(ellipse at center, transparent 70%, rgba(0,255,0,0.7) 100%)', // 绿色
 }
 
 // 道具图标映射
@@ -16,6 +17,7 @@ const ITEM_ICONS = {
   shoe: '/image/shoe.png',
   clock: '/image/clock.png',
   sheid: '/image/sheid.png',
+  zongzi: '/image/zongzi.png',
   // 可扩展更多道具
 }
 

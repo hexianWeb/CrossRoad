@@ -7,6 +7,7 @@ export const ITEM_TYPES = {
   RANDOM: 'random', // 随机箱
   SHEID: 'sheid', // 无敌盾
   SHOE: 'shoe', // 加速鞋
+  ZONGZI: 'zongzi', // 粽子
 }
 
 export default class ItemManager {
@@ -27,7 +28,7 @@ export default class ItemManager {
     items.forEach(({ tileIndex, type }) => {
       let mesh
       // 判断是否有对应模型资源
-      if ([ITEM_TYPES.CLOCK, ITEM_TYPES.RANDOM, ITEM_TYPES.SHEID, ITEM_TYPES.SHOE].includes(type) && this.resources.items[type]) {
+      if ([ITEM_TYPES.CLOCK, ITEM_TYPES.RANDOM, ITEM_TYPES.SHEID, ITEM_TYPES.SHOE, ITEM_TYPES.ZONGZI].includes(type) && this.resources.items[type]) {
         // 克隆模型
         const gltf = this.resources.items[type]
         mesh = gltf.scene ? gltf.scene.clone(true) : gltf.clone(true)

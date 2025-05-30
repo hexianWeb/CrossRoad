@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue'
 import Experience from './js/experience.js'
 import { isMobile } from './js/world/tool.js'
+import BlessingMessage from './vue/BlessingMessage.vue'
 import GameControlPanel from './vue/GameControlPanel.vue'
 import KeyIndicator from './vue/KeyIndicator.vue'
 import ScorePanel from './vue/ScorePanel.vue'
@@ -12,11 +13,12 @@ const itemScoreSum = ref(0)
 const highScore = ref(Number(localStorage.getItem('highScore') || 0))
 const showTryAgain = ref(false)
 
+const showBlessing = ref(false)
+const blessingText = ref('端午安康，粽子快乐！')
 onMounted(() => {
   // 初始化 three.js 场景
-  new Experience(threeCanvas.value)
   // 监听分数事件
-  const exp = new Experience()
+  const exp = new Experience(threeCanvas.value)
   exp.on('scoreUpdate', (newScore) => {
     maxZScore.value = newScore
     const totalScore = maxZScore.value + itemScoreSum.value
@@ -42,6 +44,16 @@ onMounted(() => {
       showTryAgain.value = false
     }, 1000)
   })
+  // 监听祝福语事件
+  exp.on('itemCollected', (type) => {
+    if (type === 'zongzi') {
+      console.log('itemCollected', type)
+      showBlessing.value = true
+      setTimeout(() => {
+        showBlessing.value = false
+      }, 1500)
+    }
+  })
 })
 </script>
 
@@ -61,6 +73,8 @@ onMounted(() => {
         Try again
       </div>
     </div>
+    <!-- 祝福语提示条 -->
+    <BlessingMessage :show="showBlessing" :text="blessingText" />
   </div>
 </template>
 

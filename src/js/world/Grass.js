@@ -1,9 +1,9 @@
 import { MIN_TILE_INDEX, tilesPerRow } from '../constants.js'
 
 export default class Grass {
-  constructor(scene, resources, rowIndex = 0) {
+  constructor(scene, object3d, rowIndex = 0) {
     this.scene = scene
-    this.resources = resources
+    this.object3d = object3d
     this.rowIndex = rowIndex
     this.tiles = []
     this.createGrassRow()
@@ -12,7 +12,7 @@ export default class Grass {
   // 生成一行草地
   createGrassRow() {
     // 获取 tile 资源（假设资源名为 'grass'，如有不同请调整）
-    const tileResource = this.resources.items.grass
+    const tileResource = this.object3d
     // tileResource.scene.scale.set(6.28, 6.28, 6.28)
     tileResource.scene.updateMatrixWorld()
     if (!tileResource) {

@@ -82,7 +82,7 @@
       - `trees`：数组，记录本行所有树木的位置与属性
         - `tileIndex`：树所在的瓦片编号（-8 ~ 8）
         - `height`：树的高度（可选，用于美术表现）
-    - **车辆行（car/truck）**
+    - **道路行（road）**
       - `direction`：布尔值，车辆行驶方向（true/false）
       - `speed`：数值，车辆行驶速度
       - `vehicles`：数组，记录本行所有车辆的初始参数

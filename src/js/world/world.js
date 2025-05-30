@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 
 import TextMesh from '../components/text-mesh.js'
-import { CLOCK_EFFECT_DURATION_MS, SHEID_EFFECT_DURATION_MS, SHOE_EFFECT_DURATION_MS, SUPABASE_TABLE } from '../constants.js'
+import { CLOCK_EFFECT_DURATION_MS, SHEID_EFFECT_DURATION_MS, SHOE_EFFECT_DURATION_MS, SUPABASE_TABLE, ZONGZI_EFFECT_DURATION_MS } from '../constants.js'
 import Experience from '../experience.js'
 import { showItemDom, showItemEffectMask } from '../utils/itemUi.js'
 import { supabase } from '../utils/supabase.js'
@@ -77,6 +77,9 @@ export default class World {
         case ITEM_TYPES.SHEID:
           addScore = 4
           break
+        case ITEM_TYPES.ZONGZI:
+          addScore = 5
+          break
       }
 
       if (addScore > 0) {
@@ -105,6 +108,9 @@ export default class World {
           this.user.setInvincible(true, SHEID_EFFECT_DURATION_MS)
           // 可选：提示无敌状态
           console.warn('[道具] 获得无敌盾，小鸡无敌3秒')
+          break
+        case ITEM_TYPES.ZONGZI:
+          duration = ZONGZI_EFFECT_DURATION_MS
           break
         default:
           duration = SHEID_EFFECT_DURATION_MS // 默认3秒

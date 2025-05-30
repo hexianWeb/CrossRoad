@@ -19,6 +19,8 @@ export const TIME_MULTIPLIER = 0.1
 
 export const SHEID_EFFECT_DURATION_MS = 5000 // 无敌盾道具效果持续时间（毫秒）
 
+export const ZONGZI_EFFECT_DURATION_MS = 5000 // 粽子道具效果持续时间（毫秒）
+
 export const SHOE_EFFECT_DURATION_MS = 7000 // 加速鞋道具效果持续时间（毫秒）
 
 export const SPEEDUP_STEP_TIME = 0.11 // 加速状态下单步时长（秒）

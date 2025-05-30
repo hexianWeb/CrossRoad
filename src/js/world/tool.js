@@ -39,7 +39,7 @@ export default function generateMetaRows(startRowIndex, N = 20) {
       }
       // 生成道具 items
       const items = []
-      const itemTypes = [ITEM_TYPES.CLOCK, ITEM_TYPES.RANDOM, ITEM_TYPES.SHEID, ITEM_TYPES.SHOE]
+      const itemTypes = [ITEM_TYPES.CLOCK, ITEM_TYPES.RANDOM, ITEM_TYPES.SHEID, ITEM_TYPES.SHOE, ITEM_TYPES.ZONGZI]
       const itemCount = Math.random() < 0.2 ? getRandomInt(1, 2) : 0 // 20%概率 1~2个
       const usedItemTileIndex = new Set([...usedTileIndex])
       let tryCount = 0
@@ -87,7 +87,7 @@ export default function generateMetaRows(startRowIndex, N = 20) {
       }
       // 生成道具 items
       const items = []
-      const itemTypes = [ITEM_TYPES.CLOCK, ITEM_TYPES.RANDOM, ITEM_TYPES.SHEID, ITEM_TYPES.SHOE]
+      const itemTypes = [ITEM_TYPES.CLOCK, ITEM_TYPES.RANDOM, ITEM_TYPES.SHEID, ITEM_TYPES.SHOE, ITEM_TYPES.ZONGZI]
       const itemCount = Math.random() < 0.2 ? getRandomInt(1, 2) : 0 // 20%概率 1~2个
       const usedItemTileIndex = new Set([...usedTileIndex])
       let tryCount = 0
@@ -111,6 +111,7 @@ export default function generateMetaRows(startRowIndex, N = 20) {
       })
     }
   }
+
   return rows
 }
 

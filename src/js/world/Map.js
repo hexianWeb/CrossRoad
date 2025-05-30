@@ -76,7 +76,7 @@ export default class Map {
 
   // 添加一行草地
   addGrassRow(rowIndex = 0) {
-    const grass = new Grass(this.scene, this.resources, rowIndex)
+    const grass = new Grass(this.scene, this.resources.items.grass, rowIndex)
     this.grassRows.push(grass)
     this.tiles.push(...grass.tiles)
   }

@@ -173,23 +173,29 @@ export default class User {
     if (!this.isMoving) {
       const dir = this.movesQueue[0]
       const nextTarget = { ...this.currentTile }
-      if (dir === 'forward')
-        nextTarget.z -= 1
-      if (dir === 'backward')
-        nextTarget.z += 1
-      if (dir === 'left')
-        nextTarget.x -= 1
-      if (dir === 'right')
-        nextTarget.x += 1
+      switch (dir) {
+        case 'forward':
+          nextTarget.z -= 1
+          break
+        case 'backward':
+          nextTarget.z += 1
+          break
+        case 'left':
+          nextTarget.x -= 1
+          break
+        case 'right':
+          nextTarget.x += 1
+          break
+      }
 
       // 先设置旋转，让小鸡朝向尝试方向
       this.startRot = this.instance.rotation.y
       this.endRot = getTargetRotation(dir)
-      this.setRotation(1) // 直接转到目标朝向
 
       // 检查是否合法
       const mapMetadata = this.experience.world.map.metadata
       if (!endsUpInValidPosition(nextTarget, mapMetadata)) {
+        this.setRotation(1) // 直接转到目标朝向
         // 不合法，执行 yoyo 动画并丢弃本次指令
         this.playYoyoAnimation(nextTarget)
         this.movesQueue.shift()
@@ -251,10 +257,8 @@ export default class User {
       return
     // 计算最短旋转路径
     let delta = this.endRot - this.startRot
-    if (delta > Math.PI)
-      delta -= 2 * Math.PI
-    if (delta < -Math.PI)
-      delta += 2 * Math.PI
+    // 归一化 deltaRotation 到 [-PI, PI] 区间
+    delta = ((delta + Math.PI) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI
     const y = this.startRot + delta * progress
     this.instance.rotation.y = y
   }

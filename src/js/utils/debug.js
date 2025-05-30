@@ -6,6 +6,10 @@ export default class Debug {
 
     if (this.active) {
       this.ui = new Pane()
+      const paneEl = document.querySelector('.tp-dfwv')
+      if (paneEl) {
+        paneEl.style.zIndex = '9999'
+      }
     }
   }
 }

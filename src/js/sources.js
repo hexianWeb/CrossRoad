@@ -144,4 +144,9 @@ export default [
     type: 'gltfModel',
     path: './model/shoe.glb',
   },
+  {
+    name: 'zongzi',
+    type: 'gltfModel',
+    path: './model/zongzi.glb',
+  },
 ]
