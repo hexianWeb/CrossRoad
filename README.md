@@ -49,7 +49,20 @@
   - ✅ 道具状态显示
   - ✅ 特殊能力状态栏
   - ✅ 游戏结束界面
-
+## Docker部署
+```
+docker run -it -d -p 80:80 lijiecodelives/crossroad:latest
+```
+```yml
+version: "3"
+services:
+  crossroad:
+    image: lijiecodelives/crossroad:latest
+    container_name: crossroad
+    ports:
+      - 80:80
+    restart: always
+```
 ## 一、项目概述与目标
 
 本项目为一款基于 Three.js 的 2.5D 视角休闲小游戏 Demo。玩家操控一只小鸡不断穿越马路，躲避来往小车，并在过程中收集道具以获取分数和单次可用的特殊能力。项目旨在展示 Three.js 在 2.5D 场景下的交互、动画与资源管理能力，适合作为图形学教学、Three.js 框架实践或小游戏原型开发参考。
